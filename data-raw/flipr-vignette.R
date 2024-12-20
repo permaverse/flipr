@@ -12,7 +12,6 @@ mu2 <- 4
 sd1 <- 1
 sd2 <- 1
 nperms <- 100000
-ncores <- 6
 
 null_spec <- function(y, parameters) {
   purrr::map(y, ~ .x - parameters[1])
@@ -47,10 +46,7 @@ pfa$set_grid(
 )
 
 pfa$set_nperms(nperms)
-pfa$evaluate_grid(
-  grid = pfa$grid,
-  ncores = ncores
-)
+pfa$evaluate_grid(grid = pfa$grid)
 
 saveRDS(pfa, "data-raw/pfa.rds")
 
@@ -81,10 +77,7 @@ pfb$set_grid(
 )
 
 pfb$set_nperms(nperms)
-pfb$evaluate_grid(
-  grid = pfb$grid,
-  ncores = ncores
-)
+pfb$evaluate_grid(grid = pfb$grid)
 
 saveRDS(pfb, "data-raw/pfb.rds")
 
@@ -115,9 +108,6 @@ pfc$set_grid(
 )
 
 pfc$set_nperms(nperms)
-pfc$evaluate_grid(
-  grid = pfc$grid,
-  ncores = ncores
-)
+pfc$evaluate_grid(grid = pfb$grid)
 
 saveRDS(pfc, "data-raw/pfc.rds")

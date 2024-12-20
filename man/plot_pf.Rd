@@ -4,7 +4,7 @@
 \alias{plot_pf}
 \title{Visualization of Plausibility Functions}
 \usage{
-plot_pf(pf, alpha = 0.05, ngrid = 10, ncores = 1, subtitle = "")
+plot_pf(pf, alpha = 0.05, ngrid = 10, subtitle = "")
 }
 \arguments{
 \item{pf}{A \code{\link{PlausibilityFunction}} object.}
@@ -16,9 +16,6 @@ plausibility function against. Defaults to \code{0.05}.}
 function will be evaluated. Specifically if \code{K} is the number of parameters
 under investigation, the grid will be of size \code{(ngrid + 1)^K}. Defaults to
 \code{10L}.}
-
-\item{ncores}{An integer specifying the number of cores to use for
-parallelized computations. Defaults to \code{1L}.}
 
 \item{subtitle}{A string for specifying a subtitle to the plot. Defaults to
 \code{""} leading to no subtitle.}

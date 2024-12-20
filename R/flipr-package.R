@@ -7,7 +7,6 @@
 #' density-valued data.
 #'
 #' @useDynLib flipr, .registration = TRUE
-#' @importFrom future plan
 #' @importFrom furrr future_map future_map_dbl
 #' @import ggplot2
 #' @importFrom progressr with_progress progressor

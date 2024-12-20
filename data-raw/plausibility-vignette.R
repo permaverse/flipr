@@ -8,7 +8,6 @@ library(tibble)
 library(tidyr)
 library(flipr)
 
-ncores <- 6
 ngrid_in <- 10
 ngrid_out <- 100
 nperms <- 100000
@@ -54,18 +53,12 @@ pf$set_grid(
 pf$set_nperms(nperms)
 
 pf$set_alternative("two_tail")
-pf$evaluate_grid(
-  grid = pf$grid,
-  ncores = ncores
-)
+pf$evaluate_grid(grid = pf$grid)
 df <- rename(pf$grid, two_tail = pvalue)
 
 pf$set_alternative("left_tail")
 pf$grid$pvalue <- NULL
-pf$evaluate_grid(
-  grid = pf$grid,
-  ncores = ncores
-)
+pf$evaluate_grid(grid = pf$grid)
 df <- bind_rows(
   df,
   rename(pf$grid, left_tail = pvalue)
@@ -73,10 +66,7 @@ df <- bind_rows(
 
 pf$set_alternative("right_tail")
 pf$grid$pvalue <- NULL
-pf$evaluate_grid(
-  grid = pf$grid,
-  ncores = ncores
-)
+pf$evaluate_grid(grid = pf$grid)
 df <- bind_rows(
   df,
   rename(pf$grid, right_tail = pvalue)
@@ -129,18 +119,12 @@ pf$set_grid(
 pf$set_nperms(nperms)
 
 pf$set_alternative("two_tail")
-pf$evaluate_grid(
-  grid = pf$grid,
-  ncores = ncores
-)
+pf$evaluate_grid(grid = pf$grid)
 df <- rename(pf$grid, two_tail = pvalue)
 
 pf$set_alternative("left_tail")
 pf$grid$pvalue <- NULL
-pf$evaluate_grid(
-  grid = pf$grid,
-  ncores = ncores
-)
+pf$evaluate_grid(grid = pf$grid)
 df <- bind_rows(
   df,
   rename(pf$grid, left_tail = pvalue)
@@ -148,10 +132,7 @@ df <- bind_rows(
 
 pf$set_alternative("right_tail")
 pf$grid$pvalue <- NULL
-pf$evaluate_grid(
-  grid = pf$grid,
-  ncores = ncores
-)
+pf$evaluate_grid(grid = pf$grid)
 df <- bind_rows(
   df,
   rename(pf$grid, right_tail = pvalue)
@@ -207,7 +188,7 @@ pf$set_grid(
   parameters = pf$parameters,
   npoints = ngrid_in
 )
-pf$evaluate_grid(grid = pf$grid, ncores = ncores)
+pf$evaluate_grid(grid = pf$grid)
 grid_in <- pf$grid
 pf$set_grid(
   parameters = pf$parameters,
@@ -235,7 +216,7 @@ pf$set_grid(
   parameters = pf$parameters,
   npoints = ngrid_in
 )
-pf$evaluate_grid(grid = pf$grid, ncores = ncores)
+pf$evaluate_grid(grid = pf$grid)
 grid_in <- pf$grid
 pf$set_grid(
   parameters = pf$parameters,

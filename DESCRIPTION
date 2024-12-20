@@ -36,7 +36,6 @@ Imports:
     cli,
     dials,
     furrr,
-    future,
     ggplot2,
     magrittr,
     optimParallel,
