@@ -270,8 +270,8 @@ aggregate test statistic values when non-parametric combination is used
 and \verb{"fisher} for now. Defaults to \code{"tippett"}.}
 
 \item{\code{pvalue_formula}}{A string specifying which formula to use for
-computing the permutation p-value. Choices are either \code{probability}
-(default) or \code{estimator}. The former provides p-values that lead to
+computing the permutation p-value. Choices are either \code{exact}
+(default), \code{upper_bound} or \code{estimate}. The former provides p-values that lead to
 exact hypothesis tests while the latter provides an unbiased estimate
 of the traditional p-value.}
 
@@ -291,6 +291,8 @@ etc. Defaults to \code{NULL}.}
 
 \item{\code{grid}}{A tibble storing evaluations of the plausibility function on
 a regular centered grid of the parameter space. Defaults to \code{NULL}.}
+
+\item{\code{seed}}{A numeric value specifying the seed to be used. Defaults to \code{1234}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -664,7 +666,6 @@ Change the value of the \code{point_estimate} field.
   point_estimate = NULL,
   lower_bound = -10,
   upper_bound = 10,
-  ncores = 1L,
   estimate = FALSE,
   overwrite = FALSE
 )}\if{html}{\out{</div>}}
@@ -683,10 +684,6 @@ used as lower bound for all parameters. Defaults to \code{-10}.}
 \item{\code{upper_bound}}{A scalar or numeric vector specifying the lower bounds
 for each parameter under investigation. If it is a scalar, the value is
 used as lower bound for all parameters. Defaults to \code{10}.}
-
-\item{\code{ncores}}{An integer specifying the number of cores to use for
-maximizing the plausibility function to get a point estimate of the
-parameters. Defaults to \code{1L}.}
 
 \item{\code{estimate}}{A boolean specifying whether the rough point estimate
 provided by \code{val} should serve as initial point for maximizing the
@@ -836,7 +833,7 @@ Updates the \code{grid} field with a \code{pvalue} column storing
 evaluations of the plausibility function on the regular centered grid
 of the parameter space.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlausibilityFunction$evaluate_grid(grid, ncores = 1L)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlausibilityFunction$evaluate_grid(grid)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -844,9 +841,6 @@ of the parameter space.
 \describe{
 \item{\code{grid}}{A \code{\link[tibble]{tibble}} storing a grid that spans the
 space of parameters under investigation.}
-
-\item{\code{ncores}}{An integer specifying the number of cores to run
-evaluations in parallel. Defaults to \code{1L}.}
 }
 \if{html}{\out{</div>}}
 }

@@ -10,8 +10,6 @@
 #'   function will be evaluated. Specifically if `K` is the number of parameters
 #'   under investigation, the grid will be of size `(ngrid + 1)^K`. Defaults to
 #'   `10L`.
-#' @param ncores An integer specifying the number of cores to use for
-#'   parallelized computations. Defaults to `1L`.
 #' @param subtitle A string for specifying a subtitle to the plot. Defaults to
 #'   `""` leading to no subtitle.
 #'
@@ -42,7 +40,7 @@
 #' )
 #' pf$evaluate_grid(grid = pf$grid)
 #' plot_pf(pf)
-plot_pf <- function(pf, alpha = 0.05, ngrid = 10, ncores = 1, subtitle = "") {
+plot_pf <- function(pf, alpha = 0.05, ngrid = 10, subtitle = "") {
   if (pf$nparams > 2)
     abort("Only one- or two-dimensional plausibility functions can currently be plotted.")
 

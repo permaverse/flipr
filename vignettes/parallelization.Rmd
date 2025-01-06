@@ -1,0 +1,152 @@
+---
+title: "Parallel processing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{parallelization}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(flipr)
+load("../R/sysdata.rda")
+time_without_parallelization <- df_parallelization$time_without_par
+time_with_parallelization <- df_parallelization$time_par
+```
+
+The [**flipr**](https://lmjl-alea.github.io/flipr/) package uses functions
+contained in the [**furrr**](https://future.futureverse.org/index.html) package
+for parallel processing. The setting of parallelization has to be done on the
+user side. We illustrate here how to achieve asynchronous evaluation. We use the
+[**future**](https://future.futureverse.org/index.html) package to set the plan,
+the **parallel** package to define a default cluster, and the
+[**progressr**](https://progressr.futureverse.org/index.html) package to report
+progress updates.
+
+By setting the desired number of cores, we define the number of background R
+sessions that will be used to evaluate expressions in parallel. This number is
+used to set the multisession plan with the function `future::plan()` and to
+define a default cluster with `parallel::setDefaultCluster()`. Then, to enable
+the visualization of evaluation progress, we can put the code in the
+`progressr::with_progress()` function, or more simply set it for all the
+following code with the `progressr::handlers()` function. After these settings,
+[**flipr**](https://lmjl-alea.github.io/flipr/) functions can be used, as shown
+in this example.
+
+To show the benefit of parallel processing, we compare here the processing times
+necessary to evaluate a grid with a plausibility function. First, here is the
+computation without parallelization.
+
+```{r, eval=FALSE}
+set.seed(1234)
+x <- rnorm(10, 1, 1)
+y <- rnorm(10, 4, 1)
+
+null_spec <- function(y, parameters) {
+  purrr::map(y, ~ .x - parameters[1])
+}
+stat_functions <- list(stat_t)
+stat_assignments <- list(delta = 1)
+
+pf <- PlausibilityFunction$new(
+  null_spec = null_spec,
+  stat_functions = stat_functions,
+  stat_assignments = stat_assignments,
+  x, y
+)
+
+pf$set_point_estimate(mean(y) - mean(x), overwrite = TRUE)
+pf$set_parameter_bounds(
+  point_estimate = pf$point_estimate, 
+  conf_level = pf$max_conf_level
+)
+pf$set_grid(
+  parameters = pf$parameters, 
+  npoints = 50L
+)
+
+tictoc::tic()
+pf$evaluate_grid(grid = pf$grid)
+time_without_parallelization <- tictoc::toc()
+```
+
+```{r}
+time_without_parallelization 
+```
+
+## Computation with parallel processing
+
+By setting the desired number of cores, we define the number of background R
+sessions that will be used to evaluate expressions in parallel. This number is
+used to set the multisession plan with the function `future::plan()` and to
+define a default cluster with `parallel::setDefaultCluster()`. Then, to enable
+the visualization of evaluation progress, we can put the code in the
+`progressr::with_progress()` function, or more simply set it for all the
+following code with the `progressr::handlers()` function. After these settings,
+[**flipr**](https://lmjl-alea.github.io/flipr/) functions can be used, as shown
+in this example.
+
+```{r, eval=FALSE}
+ncores <- 4
+future::plan(multisession, workers = ncores)
+cl <- parallel::makeCluster(ncores)
+parallel::setDefaultCluster(cl)
+progressr::handlers(global = TRUE)
+
+set.seed(1234)
+x <- rnorm(10, 1, 1)
+y <- rnorm(10, 4, 1)
+
+null_spec <- function(y, parameters) {
+  purrr::map(y, ~ .x - parameters[1])
+}
+stat_functions <- list(stat_t)
+stat_assignments <- list(delta = 1)
+
+pf <- PlausibilityFunction$new(
+  null_spec = null_spec,
+  stat_functions = stat_functions,
+  stat_assignments = stat_assignments,
+  x, y
+)
+
+pf$set_point_estimate(mean(y) - mean(x), overwrite = TRUE)
+pf$set_parameter_bounds(
+  point_estimate = pf$point_estimate, 
+  conf_level = pf$max_conf_level
+)
+pf$set_grid(
+  parameters = pf$parameters, 
+  npoints = 50L
+)
+
+tictoc::tic()
+pf$evaluate_grid(grid = pf$grid)
+time_with_parallelization <- tictoc::toc()
+
+parallel::stopCluster(cl)
+```
+
+It is good practice to shut down the workers with the `parallel::stopCluster()`
+function at the end of the code.
+
+```{r}
+time_with_parallelization
+```
+
+This experiment proves that we can save a lot of computation time when using
+parallel processing, as we gained approximately 33 seconds in this example to
+evaluate the plausibility function.
+
+Finally, to return to a sequential plan with no progress updates, the following
+code can be used.
+
+```{r, eval=FALSE}
+future::plan(sequential)
+parallel::setDefaultCluster(NULL)
+progressr::handlers(global = FALSE)
+```

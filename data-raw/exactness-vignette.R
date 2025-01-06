@@ -2,6 +2,11 @@
 
 library(purrr)
 library(parallel)
+library(furrr)
+library(flipr)
+
+# Parallelization
+future::plan("future::multisession", workers = availableCores())
 
 # General setup
 nreps <- 1e4
@@ -16,21 +21,23 @@ sim <- map(sample.int(.Machine$integer.max, nreps, replace = TRUE), ~ {
     )
   })
 
-# Cluster setup
-cl <- makeCluster(detectCores(logical = FALSE))
-clusterEvalQ(cl, {
-  library(purrr)
-  library(flipr)
-  null_spec <- function(y, parameters) {
-    map(y, ~ .x - parameters)
-  }
-  stat_functions <- list(stat_t)
-  stat_assignments <- list(delta = 1)
-  nperms <- 20
-  alpha <- 0.05
-})
+null_spec <- function(y, parameters) {
+  map(y, ~ .x - parameters)
+}
+stat_functions <- list(stat_t)
+stat_assignments <- list(delta = 1)
+nperms <- 20
+alpha <- 0.05
 
-alpha_estimates <- pbapply::pblapply(sim, function(.l) {
+
+progressr::with_progress({
+  p <- progressr::progressor(steps = length(sim) / 10) # progress bar set up
+  ii <- 1
+
+  alpha_estimates <- furrr::future_map(sim, function(.l) {
+    if (ii %% 10 == 0) {p()} # progress bar update
+    ii <<- ii + 1
+
     pf <- PlausibilityFunction$new(
       null_spec = null_spec,
       stat_functions = stat_functions,
@@ -51,11 +58,13 @@ alpha_estimates <- pbapply::pblapply(sim, function(.l) {
       upper_bound = pv_upper_bound <= alpha,
       estimate    = pv_estimate    <= alpha
     )
-  }, cl = cl) %>%
-  transpose() %>%
-  simplify_all() %>%
-  map(mean)
-stopCluster(cl)
+  }, .options = furrr_options(seed = TRUE)) %>%
+    transpose() %>%
+    simplify_all() %>%
+    map(mean)
+})
+
+
 alpha_estimates
 
 saveRDS(alpha_estimates, "data-raw/alpha.rds")

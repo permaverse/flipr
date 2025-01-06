@@ -33,6 +33,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Juliette Chiapello [contributor]
+  \item Manon Simonot \email{manon.simonot@univ-nantes.fr} [contributor]
 }
 
 }

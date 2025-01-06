@@ -371,9 +371,6 @@ PlausibilityFunction <- R6::R6Class(
     #' @param upper_bound A scalar or numeric vector specifying the lower bounds
     #'   for each parameter under investigation. If it is a scalar, the value is
     #'   used as lower bound for all parameters. Defaults to `10`.
-    #' @param ncores An integer specifying the number of cores to use for
-    #'   maximizing the plausibility function to get a point estimate of the
-    #'   parameters. Defaults to `1L`.
     #' @param estimate A boolean specifying whether the rough point estimate
     #'   provided by `val` should serve as initial point for maximizing the
     #'   plausibility function (`estimate = TRUE`) or as final point estimate
@@ -401,7 +398,6 @@ PlausibilityFunction <- R6::R6Class(
     set_point_estimate = function(point_estimate = NULL,
                                   lower_bound = -10,
                                   upper_bound =  10,
-                                  ncores = 1L,
                                   estimate = FALSE,
                                   overwrite = FALSE) {
       if (!anyNA(self$point_estimate) && !overwrite) {
@@ -424,8 +420,7 @@ PlausibilityFunction <- R6::R6Class(
           pf = self,
           guess = point_estimate,
           lower_bound = lower_bound,
-          upper_bound = upper_bound,
-          ncores = ncores
+          upper_bound = upper_bound
         )
         self$point_estimate <- opt$par
         names(self$point_estimate) <- names(self$parameters)
@@ -611,8 +606,6 @@ PlausibilityFunction <- R6::R6Class(
     #'
     #' @param grid A \code{\link[tibble]{tibble}} storing a grid that spans the
     #'   space of parameters under investigation.
-    #' @param ncores An integer specifying the number of cores to run
-    #'   evaluations in parallel. Defaults to `1L`.
     #'
     #' @examples
     #' x <- rnorm(10)
@@ -639,7 +632,7 @@ PlausibilityFunction <- R6::R6Class(
     #'   npoints = 2L
     #' )
     #' pf$evaluate_grid(grid = pf$grid)
-    evaluate_grid = function(grid, ncores = 1L) {
+    evaluate_grid = function(grid) {
       if ("pvalue" %in% names(self$grid) && is_equal(grid, self$grid)) {
         abort("The current grid has already been evaluated.")
       }
@@ -649,18 +642,16 @@ PlausibilityFunction <- R6::R6Class(
         self$grid <- grid
       }
 
-      cl <- NULL
-      if (ncores > 1) {
-        cl <- parallel::makeCluster(ncores)
-        parallel::clusterEvalQ(cl, {
-          library(purrr)
-        })
-      }
-      self$grid$pvalue <- self$grid %>%
-        purrr::array_tree(margin = 1) %>%
-        pbapply::pbsapply(self$get_value, cl = cl)
-      if (ncores > 1L)
-        parallel::stopCluster(cl)
+      transformed_grid <- self$grid %>%
+        purrr::array_tree(margin = 1)
+
+      cli::cli_alert_info("Evaluating grid.")
+      p <- progressr::progressor(steps = length(transformed_grid)) #progress bar set up
+
+      self$grid$pvalue <- furrr::future_map_dbl(transformed_grid, function(.l) {
+          p() #progress bar update
+          self$get_value(.l)
+        }, .options = furrr::furrr_options(seed = TRUE))
     },
 
     #' @field seed A numeric value specifying the seed to be used. Defaults to `1234`.

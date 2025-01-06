@@ -30,15 +30,16 @@ Description: A flexible permutation framework for making
     data or density-valued data.
 License: GPL (>= 3)
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Imports: 
     cli,
     dials,
+    furrr,
     ggplot2,
     magrittr,
     optimParallel,
-    pbapply,
+    progressr,
     purrr,
     R6,
     Rcpp,
