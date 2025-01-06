@@ -62,8 +62,8 @@ Suggests:
     viridis,
     viridisLite
 VignetteBuilder: knitr
-URL: https://LMJL-Alea.github.io/flipr/, https://github.com/LMJL-Alea/flipr/
-BugReports: https://github.com/LMJL-Alea/flipr/issues/
+URL: https://permaverse.github.io/flipr/, https://github.com/permaverse/flipr/
+BugReports: https://github.com/permaverse/flipr/issues/
 Depends: 
     R (>= 2.10)
 LinkingTo: 
