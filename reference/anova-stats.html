@@ -45,6 +45,9 @@ between data points."><meta property="og:image" content="/logo.png"><!-- mathjax
       <a href="../articles/exactness.html">On the exactness of permutation tests</a>
     </li>
     <li>
+      <a href="../articles/parallelization.html">Parallel processing</a>
+    </li>
+    <li>
       <a href="../articles/plausibility.html">Computing plausibility functions</a>
     </li>
   </ul></li>
@@ -145,10 +148,10 @@ connectivity." Biometrics 76.1 (2020): 257-269.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.318386</span>
 <span class="r-in"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/array-coercion.html" class="external-link">array_tree</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">npk2</span><span class="op">$</span><span class="va">yield</span>, <span class="va">npk2</span><span class="op">$</span><span class="va">foo</span><span class="op">)</span>, margin <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">stat_anova_f</span><span class="op">(</span><span class="va">data2</span>, <span class="va">npk2</span><span class="op">$</span><span class="va">block</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.460938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.313078</span>
 <span class="r-in"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">npk2</span><span class="op">$</span><span class="va">yield</span>, <span class="va">npk2</span><span class="op">$</span><span class="va">foo</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">stat_anova_f_ip</span><span class="op">(</span><span class="va">D</span>, <span class="va">npk2</span><span class="op">$</span><span class="va">block</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.849093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.805599</span>
 </code></pre></div>
     </div>
   </div>

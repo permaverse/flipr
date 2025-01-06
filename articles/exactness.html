@@ -58,6 +58,9 @@
       <a href="../articles/exactness.html">On the exactness of permutation tests</a>
     </li>
     <li>
+      <a href="../articles/parallelization.html">Parallel processing</a>
+    </li>
+    <li>
       <a href="../articles/plausibility.html">Computing plausibility functions</a>
     </li>
   </ul>
@@ -404,7 +407,10 @@ We draw
 permutations for each test. We used a significance level of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">5\%</annotation></semantics></math>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># General setup</span></span>
+<code class="sourceCode R"><span><span class="co"># Parallelization</span></span>
+<span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fu">availableCores</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># General setup</span></span>
 <span><span class="va">nreps</span> <span class="op">&lt;-</span> <span class="fl">1e4</span></span>
 <span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
@@ -417,21 +423,22 @@ permutations for each test. We used a significance level of
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Cluster setup</span></span>
-<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">makeCluster</span><span class="op">(</span><span class="fu">detectCores</span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">clusterEvalQ</span><span class="op">(</span><span class="va">cl</span>, <span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://LMJL-Alea.github.io/flipr/" class="external-link">flipr</a></span><span class="op">)</span></span>
-<span>  <span class="va">null_spec</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">parameters</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu">map</span><span class="op">(</span><span class="va">y</span>, <span class="op">~</span> <span class="va">.x</span> <span class="op">-</span> <span class="va">parameters</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="va">stat_functions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">stat_t</span><span class="op">)</span></span>
-<span>  <span class="va">stat_assignments</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>delta <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="va">nperms</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
-<span>  <span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
-<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="va">null_spec</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">parameters</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">map</span><span class="op">(</span><span class="va">y</span>, <span class="op">~</span> <span class="va">.x</span> <span class="op">-</span> <span class="va">parameters</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">stat_functions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">stat_t</span><span class="op">)</span></span>
+<span><span class="va">stat_assignments</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>delta <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">nperms</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
+<span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
 <span></span>
-<span><span class="va">alpha_estimates</span> <span class="op">&lt;-</span> <span class="fu">pbapply</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pbapply/man/pbapply.html" class="external-link">pblapply</a></span><span class="op">(</span><span class="va">sim</span>, <span class="kw">function</span><span class="op">(</span><span class="va">.l</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">with_progress</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://progressr.futureverse.org/reference/progressor.html" class="external-link">progressor</a></span><span class="op">(</span>steps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10</span><span class="op">)</span> <span class="co"># progress bar set up</span></span>
+<span>  <span class="va">ii</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span></span>
+<span>  <span class="va">alpha_estimates</span> <span class="op">&lt;-</span> <span class="fu">furrr</span><span class="fu">::</span><span class="fu"><a href="https://furrr.futureverse.org/reference/future_map.html" class="external-link">future_map</a></span><span class="op">(</span><span class="va">sim</span>, <span class="kw">function</span><span class="op">(</span><span class="va">.l</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">ii</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">10</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span><span class="fu">p</span><span class="op">(</span><span class="op">)</span><span class="op">}</span> <span class="co"># progress bar update</span></span>
+<span>    <span class="va">ii</span> <span class="op">&lt;&lt;-</span> <span class="va">ii</span> <span class="op">+</span> <span class="fl">1</span></span>
 <span>    <span class="va">pf</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PlausibilityFunction.html">PlausibilityFunction</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>      null_spec <span class="op">=</span> <span class="va">null_spec</span>,</span>
 <span>      stat_functions <span class="op">=</span> <span class="va">stat_functions</span>,</span>
@@ -452,17 +459,17 @@ permutations for each test. We used a significance level of
 <span>      upper_bound <span class="op">=</span> <span class="va">pv_upper_bound</span> <span class="op">&lt;=</span> <span class="va">alpha</span>,</span>
 <span>      estimate    <span class="op">=</span> <span class="va">pv_estimate</span>    <span class="op">&lt;=</span> <span class="va">alpha</span></span>
 <span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span>, cl <span class="op">=</span> <span class="va">cl</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="op">}</span>, .options <span class="op">=</span> <span class="fu">furrr_options</span><span class="op">(</span>seed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">transpose</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">simplify_all</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">map</span><span class="op">(</span><span class="va">mean</span><span class="op">)</span></span>
-<span><span class="fu">stopCluster</span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">as_tibble</span><span class="op">(</span><span class="va">alpha_estimates</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;    exact upper_bound estimate</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.050<span style="text-decoration: underline;">7</span>      0.050<span style="text-decoration: underline;">7</span>   0.097<span style="text-decoration: underline;">8</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0.043<span style="text-decoration: underline;">2</span>      0.043<span style="text-decoration: underline;">2</span>   0.088<span style="text-decoration: underline;">4</span></span></span></code></pre></div>
 <p>This simulation provides numerical evidence that using the
 permutation p-value
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>e</mi></msub><annotation encoding="application/x-tex">p_e</annotation></semantics></math>

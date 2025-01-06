@@ -41,6 +41,9 @@
       <a href="../articles/exactness.html">On the exactness of permutation tests</a>
     </li>
     <li>
+      <a href="../articles/parallelization.html">Parallel processing</a>
+    </li>
+    <li>
       <a href="../articles/plausibility.html">Computing plausibility functions</a>
     </li>
   </ul></li>
@@ -104,8 +107,8 @@ and <code>"fisher</code> for now. Defaults to <code>"tippett"</code>.</p></dd>
 
 <dt><code>pvalue_formula</code></dt>
 <dd><p>A string specifying which formula to use for
-computing the permutation p-value. Choices are either <code>probability</code>
-(default) or <code>estimator</code>. The former provides p-values that lead to
+computing the permutation p-value. Choices are either <code>exact</code>
+(default), <code>upper_bound</code> or <code>estimate</code>. The former provides p-values that lead to
 exact hypothesis tests while the latter provides an unbiased estimate
 of the traditional p-value.</p></dd>
 
@@ -133,6 +136,10 @@ etc. Defaults to <code>NULL</code>.</p></dd>
 <dt><code>grid</code></dt>
 <dd><p>A tibble storing evaluations of the plausibility function on
 a regular centered grid of the parameter space. Defaults to <code>NULL</code>.</p></dd>
+
+
+<dt><code>seed</code></dt>
+<dd><p>A numeric value specifying the seed to be used. Defaults to <code>1234</code>.</p></dd>
 
 
 </dl><p></p></div>
@@ -492,7 +499,6 @@ achieve for the confidence regions.</p></dd>
 <span>  point_estimate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lower_bound <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>,</span>
 <span>  upper_bound <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  ncores <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
@@ -515,12 +521,6 @@ used as lower bound for all parameters. Defaults to <code>-10</code>.</p></dd>
 <dd><p>A scalar or numeric vector specifying the lower bounds
 for each parameter under investigation. If it is a scalar, the value is
 used as lower bound for all parameters. Defaults to <code>10</code>.</p></dd>
-
-
-<dt><code>ncores</code></dt>
-<dd><p>An integer specifying the number of cores to use for
-maximizing the plausibility function to get a point estimate of the
-parameters. Defaults to <code>1L</code>.</p></dd>
 
 
 <dt><code>estimate</code></dt>
@@ -665,7 +665,7 @@ each dimension. Defaults to <code>20L</code>.</p></dd>
 evaluations of the plausibility function on the regular centered grid
 of the parameter space.</p><div class="section">
 <h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PlausibilityFunction</span><span class="op">$</span><span class="fu">evaluate_grid</span><span class="op">(</span><span class="va">grid</span>, ncores <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">PlausibilityFunction</span><span class="op">$</span><span class="fu">evaluate_grid</span><span class="op">(</span><span class="va">grid</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -673,11 +673,6 @@ of the parameter space.</p><div class="section">
 <p></p><div class="arguments"><dl><dt><code>grid</code></dt>
 <dd><p>A <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></code> storing a grid that spans the
 space of parameters under investigation.</p></dd>
-
-
-<dt><code>ncores</code></dt>
-<dd><p>An integer specifying the number of cores to run
-evaluations in parallel. Defaults to <code>1L</code>.</p></dd>
 
 
 </dl><p></p></div>
@@ -1023,6 +1018,7 @@ evaluations in parallel. Defaults to <code>1L</code>.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Setting new grid size in field `$npoints`.</span>
 <span class="r-in"><span><span class="va">pf</span><span class="op">$</span><span class="fu">evaluate_grid</span><span class="op">(</span>grid <span class="op">=</span> <span class="va">pf</span><span class="op">$</span><span class="va">grid</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Evaluating grid.</span>
 </code></pre></div>
     </div>
   </div>
