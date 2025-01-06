@@ -259,7 +259,6 @@ stat_assignments <- list(delta = 1)
 nperms <- 20
 alpha <- 0.05
 
-
 progressr::with_progress({
   p <- progressr::progressor(steps = length(sim) / 10) # progress bar set up
   ii <- 1

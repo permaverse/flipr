@@ -9,7 +9,7 @@
 #' @useDynLib flipr, .registration = TRUE
 #' @importFrom furrr future_map future_map_dbl
 #' @import ggplot2
-#' @importFrom progressr with_progress progressor
+#' @importFrom progressr progressor
 #' @importFrom R6 R6Class
 #' @importFrom Rcpp sourceCpp
 #' @import rlang
