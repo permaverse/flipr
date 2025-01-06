@@ -2,11 +2,11 @@
 
 # Setup -------------------------------------------------------------------
 
-library(flipr)
 library(future)
 library(parallel)
 library(progressr)
 library(tictoc)
+library(flipr)
 
 ngrid_in <- 50L
 nperms <- 5000

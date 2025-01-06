@@ -12,16 +12,13 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(flipr)
 load("../R/sysdata.rda")
 time_without_parallelization <- df_parallelization$time_without_par
 time_with_parallelization <- df_parallelization$time_par
 ```
 
 The [**flipr**](https://lmjl-alea.github.io/flipr/) package uses functions contained in the [**furrr**](https://future.futureverse.org/index.html) package for parallel processing. The setting of parallelization has to be done on the user side. We illustrate here how to achieve asynchronous evaluation. We use the [**future**](https://future.futureverse.org/index.html) package to set the plan, the **parallel** package to define a default cluster, and the [**progressr**](https://progressr.futureverse.org/index.html) package to report progress updates.
-
-```{r setup}
-library(flipr)
-```
 
 ## Computation without parallel processing
 
