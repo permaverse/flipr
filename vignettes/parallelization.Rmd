@@ -18,7 +18,7 @@ time_without_parallelization <- df_parallelization$time_without_par
 time_with_parallelization <- df_parallelization$time_par
 ```
 
-The [**flipr**](https://lmjl-alea.github.io/flipr/) package uses functions
+The [**flipr**](https://permaverse.github.io/flipr/) package uses functions
 contained in the [**furrr**](https://future.futureverse.org/index.html) package
 for parallel processing. The setting of parallelization has to be done on the
 user side. We illustrate here how to achieve asynchronous evaluation. We use the
@@ -34,7 +34,7 @@ define a default cluster with `parallel::setDefaultCluster()`. Then, to enable
 the visualization of evaluation progress, we can put the code in the
 `progressr::with_progress()` function, or more simply set it for all the
 following code with the `progressr::handlers()` function. After these settings,
-[**flipr**](https://lmjl-alea.github.io/flipr/) functions can be used, as shown
+[**flipr**](https://permaverse.github.io/flipr/) functions can be used, as shown
 in this example.
 
 To show the benefit of parallel processing, we compare here the processing times
@@ -87,7 +87,7 @@ define a default cluster with `parallel::setDefaultCluster()`. Then, to enable
 the visualization of evaluation progress, we can put the code in the
 `progressr::with_progress()` function, or more simply set it for all the
 following code with the `progressr::handlers()` function. After these settings,
-[**flipr**](https://lmjl-alea.github.io/flipr/) functions can be used, as shown
+[**flipr**](https://permaverse.github.io/flipr/) functions can be used, as shown
 in this example.
 
 ```{r, eval=FALSE}
