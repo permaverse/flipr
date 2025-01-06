@@ -26,12 +26,12 @@ one to perform point estimation, confidence regions and hypothesis tests under
 mild assumptions about the collected data and no distributional assumption. In
 this article, we briefly illustrate how each of these aspects can be treated
 from a permutation point of view using the
-[**flipr**](https://lmjl-alea.github.io/flipr/) package. This package has been
+[**flipr**](https://permaverse.github.io/flipr/) package. This package has been
 written and is intended as a low-level implementation of the permutation
 framework in the context of statistical inference. The mathematical object
 behind the scene is the so-called plausibility function, sometimes called
 p-value function. This article explains what the plausibility function is and shows how it can be easily computed using the
-permutation framework with [**flipr**](https://lmjl-alea.github.io/flipr/). We
+permutation framework with [**flipr**](https://permaverse.github.io/flipr/). We
 illustrate the shape of the plausibility function using both Gaussian and Gamma
 distributions.
 
@@ -100,12 +100,12 @@ represents the variation of the $p$-value of a test in which the null
 hypothesis is $\delta = \delta_0$ as a function of $\delta_0$
 [@martin2017; @fraser2019; @infanger2019].
 
-With [**flipr**](https://lmjl-alea.github.io/flipr/), it is easy to trace
+With [**flipr**](https://permaverse.github.io/flipr/), it is easy to trace
 such a plausibility function. Three ingredients are required alongside the data to instantiate such a function:
 
-- a null specification function that tells [**flipr**](https://lmjl-alea.github.io/flipr/) how the second sample should be transformed in order to make it exchangeable with the first sample under the null hypothesis;
+- a null specification function that tells [**flipr**](https://permaverse.github.io/flipr/) how the second sample should be transformed in order to make it exchangeable with the first sample under the null hypothesis;
 - a list of test statistics to use for detecting differences between the distributions that generated the two observed samples;
-- a list of index assignments that tells [**flipr**](https://lmjl-alea.github.io/flipr/) which test statistics to use for each parameter under investigation.
+- a list of index assignments that tells [**flipr**](https://permaverse.github.io/flipr/) which test statistics to use for each parameter under investigation.
 
 ### Null specification
 
@@ -127,26 +127,26 @@ null_spec <- function(y, parameters) {
 
 Next, we need to decide which test statistic(s) we are going to use for performing the test. Here, we are only interested in one parameter, namely the mean difference $\delta$. Since the two samples share the same variance, we can use for example the $t$-statistic with a pooled estimate of the common variance.
 
-This statistic can be easily computed using `stats::t.test(x, y, var.equal = TRUE)$statistic`. However, we want to extend its evaluation to any permuted version of the data. Test statistic functions compatible with [**flipr**](https://lmjl-alea.github.io/flipr/) should have at least two mandatory input arguments:
+This statistic can be easily computed using `stats::t.test(x, y, var.equal = TRUE)$statistic`. However, we want to extend its evaluation to any permuted version of the data. Test statistic functions compatible with [**flipr**](https://permaverse.github.io/flipr/) should have at least two mandatory input arguments:
 
 - `data` which is either a concatenated list of size $n_x + n_y$ regrouping the data points of both samples or a distance matrix of size $(n_x + n_y) \times (n_x + n_y)$ stored as an object of class `dist`.
 - `indices1` which is an integer vector of size $n_x$ storing the indices of the data points belonging to the first sample in the current permuted version of the data.
 
-A [**flipr**](https://lmjl-alea.github.io/flipr/)-compatible version of the t-statistic is already implemented in [**flipr**](https://lmjl-alea.github.io/flipr/) and ready to use as `stat_student` or its alias `stat_t`. Here, we are only going to use the $t$-statistic for this example, but we might be willing to use more than one statistic for a parameter or we might have several parameters under investigation, each one of them requiring a different test statistic. We therefore group all the test statistics that we need into a single list:
+A [**flipr**](https://permaverse.github.io/flipr/)-compatible version of the t-statistic is already implemented in [**flipr**](https://permaverse.github.io/flipr/) and ready to use as `stat_student` or its alias `stat_t`. Here, we are only going to use the $t$-statistic for this example, but we might be willing to use more than one statistic for a parameter or we might have several parameters under investigation, each one of them requiring a different test statistic. We therefore group all the test statistics that we need into a single list:
 ```{r}
 stat_functions <- list(stat_t)
 ```
 
 ### Statistic assignments
 
-Finally we need to define a named list that tells [**flipr**](https://lmjl-alea.github.io/flipr/) which test statistics among the ones declared in the `stat_functions` list should be used for each parameter under investigation. This is used to determine bounds on each parameter for the plausibility function. This list, often termed `stat_assignments`, should therefore have as many elements as there are parameters under investigation. Each element should be named after a parameter under investigation and should list the indices corresponding to the test statistics that should be used for that parameter in `stat_functions`. In our example, it boils down to:
+Finally we need to define a named list that tells [**flipr**](https://permaverse.github.io/flipr/) which test statistics among the ones declared in the `stat_functions` list should be used for each parameter under investigation. This is used to determine bounds on each parameter for the plausibility function. This list, often termed `stat_assignments`, should therefore have as many elements as there are parameters under investigation. Each element should be named after a parameter under investigation and should list the indices corresponding to the test statistics that should be used for that parameter in `stat_functions`. In our example, it boils down to:
 ```{r}
 stat_assignments <- list(delta = 1)
 ```
 
 ### Instantiation of the plausibility function
 
-In [**flipr**](https://lmjl-alea.github.io/flipr/), the plausibility function is implemented as an [R6Class](https://r6.r-lib.org/reference/R6Class.html) object. Assume we observed two samples stored in lists `x` and `y`, we therefore instantiate a plausibility function for this data as follows:
+In [**flipr**](https://permaverse.github.io/flipr/), the plausibility function is implemented as an [R6Class](https://r6.r-lib.org/reference/R6Class.html) object. Assume we observed two samples stored in lists `x` and `y`, we therefore instantiate a plausibility function for this data as follows:
 ```{r, eval=FALSE}
 pf <- PlausibilityFunction$new(
   null_spec = null_spec,
