@@ -44,18 +44,21 @@ functional data or density-valued data.
 
 ## Installation
 
-You can install the latest stable version of
-[**flipr**](https://permaverse.github.io/flipr/) on CRAN with:
+You can install the package from [CRAN](https://CRAN.R-project.org) with:
+
 ``` r
 install.packages("flipr")
 ```
 
-Or you can install the development version from [GitHub](https://github.com/) with:
+Alternatively, You can install the development version of
+[**flipr**](https://permaverse.github.io/flipr/) from
+[GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("remotes")
-remotes::install_github("permaverse/flipr")
+# install.packages("pak")
+pak::pak("permaverse/flipr")
 ```
+
 ## Example
 
 ```{r}
