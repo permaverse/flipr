@@ -73,14 +73,14 @@ it allows one to perform point estimation, confidence regions and
 hypothesis tests under mild assumptions about the collected data and no
 distributional assumption. In this article, we briefly illustrate how
 each of these aspects can be treated from a permutation point of view
-using the <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
+using the <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
 package. This package has been written and is intended as a low-level
 implementation of the permutation framework in the context of
 statistical inference. The mathematical object behind the scene is the
 so-called plausibility function, sometimes called p-value function. This
 article explains what the plausibility function is and shows how it can
-be easily computed using the permutation framework with <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>. We
-illustrate the shape of the plausibility function using both Gaussian
+be easily computed using the permutation framework with <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>.
+We illustrate the shape of the plausibility function using both Gaussian
 and Gamma distributions.</p>
 <div class="section level2">
 <h2 id="generation-of-the-toy-example">Generation of the toy example<a class="anchor" aria-label="anchor" href="#generation-of-the-toy-example"></a>
@@ -156,16 +156,16 @@ of a test in which the null hypothesis is
 as a function of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>δ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\delta_0</annotation></semantics></math><span class="citation">(Martin 2017; Fraser 2019; Infanger and
 Schmidt-Trucksäss 2019)</span>.</p>
-<p>With <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>, it
-is easy to trace such a plausibility function. Three ingredients are
+<p>With <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>,
+it is easy to trace such a plausibility function. Three ingredients are
 required alongside the data to instantiate such a function:</p>
 <ul>
-<li>a null specification function that tells <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a> how
-the second sample should be transformed in order to make it exchangeable
-with the first sample under the null hypothesis;</li>
+<li>a null specification function that tells <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
+how the second sample should be transformed in order to make it
+exchangeable with the first sample under the null hypothesis;</li>
 <li>a list of test statistics to use for detecting differences between
 the distributions that generated the two observed samples;</li>
-<li>a list of index assignments that tells <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
+<li>a list of index assignments that tells <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
 which test statistics to use for each parameter under
 investigation.</li>
 </ul>
@@ -222,7 +222,7 @@ with a pooled estimate of the common variance.</p>
 <p>This statistic can be easily computed using
 <code>stats::t.test(x, y, var.equal = TRUE)$statistic</code>. However,
 we want to extend its evaluation to any permuted version of the data.
-Test statistic functions compatible with <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
+Test statistic functions compatible with <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
 should have at least two mandatory input arguments:</p>
 <ul>
 <li>
@@ -237,9 +237,9 @@ stored as an object of class <code>dist</code>.</li>
 storing the indices of the data points belonging to the first sample in
 the current permuted version of the data.</li>
 </ul>
-<p>A <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>-compatible
-version of the t-statistic is already implemented in <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a> and
-ready to use as <code>stat_student</code> or its alias
+<p>A <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>-compatible
+version of the t-statistic is already implemented in <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
+and ready to use as <code>stat_student</code> or its alias
 <code>stat_t</code>. Here, we are only going to use the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-statistic
 for this example, but we might be willing to use more than one statistic
@@ -252,7 +252,7 @@ group all the test statistics that we need into a single list:</p>
 <div class="section level3">
 <h3 id="statistic-assignments">Statistic assignments<a class="anchor" aria-label="anchor" href="#statistic-assignments"></a>
 </h3>
-<p>Finally we need to define a named list that tells <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>
+<p>Finally we need to define a named list that tells <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
 which test statistics among the ones declared in the
 <code>stat_functions</code> list should be used for each parameter under
 investigation. This is used to determine bounds on each parameter for
@@ -269,7 +269,7 @@ to:</p>
 <div class="section level3">
 <h3 id="instantiation-of-the-plausibility-function">Instantiation of the plausibility function<a class="anchor" aria-label="anchor" href="#instantiation-of-the-plausibility-function"></a>
 </h3>
-<p>In <a href="https://lmjl-alea.github.io/flipr/" class="external-link"><strong>flipr</strong></a>,
+<p>In <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>,
 the plausibility function is implemented as an <a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a> object.
 Assume we observed two samples stored in lists <code>x</code> and
 <code>y</code>, we therefore instantiate a plausibility function for
