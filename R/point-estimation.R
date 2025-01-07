@@ -6,12 +6,25 @@ compute_point_estimate <- function(pf,
   nparams <- pf$nparams
 
   if (!is.null(guess)) {
-    # uses user default cluster
-    opt <- optimParallel::optimParallel(
-      par = guess,
-      fn = pf$get_value,
-      control = list(fnscale = -1)
-    )
+    # if user did not set a default cluster we compute in sequential
+    if (is.null(parallel::getDefaultCluster())) {
+      cli::cli_alert_warning("Default cluster has not been set. You may consider setting one to run computation in parallel.")
+      opt <- stats::optim(
+        par = guess,
+        fn = pf$get_value,
+        method = "L-BFGS-B",
+        control = list(fnscale = -1)
+      )
+    }
+    else {
+      # uses user default cluster to compute in parallel
+      opt <- optimParallel::optimParallel(
+        par = guess,
+        fn = pf$get_value,
+        control = list(fnscale = -1),
+        parallel = list(cl = NULL, forward = FALSE, loginfo = FALSE)
+      )
+    }
     x0 <- opt$par
     fval <- opt$value
   } else {
@@ -21,6 +34,7 @@ compute_point_estimate <- function(pf,
     if (length(upper_bound) != nparams)
       abort("The number of provided upper bounds does not match the number of parameters.")
 
+    # if user default cluser is not set, will run in sequential, else run in parallel
     opt <- rgenoud::genoud(
       fn = pf$get_value,
       nvars = nparams,
@@ -31,7 +45,7 @@ compute_point_estimate <- function(pf,
       wait.generations = 2 * nparams + 1,
       BFGSburnin = 2 * nparams + 1,
       print.level = 0,
-      cluster = parallel::getDefaultCluster(),
+      cluster = if (!is.null(parallel::getDefaultCluster())) parallel::getDefaultCluster() else FALSE,
       balance = nparams > 2
     )
     opt <- compute_point_estimate(

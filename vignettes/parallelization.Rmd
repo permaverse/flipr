@@ -14,8 +14,10 @@ knitr::opts_chunk$set(
 )
 library(flipr)
 load("../R/sysdata.rda")
-time_without_parallelization <- df_parallelization$time_without_par
-time_with_parallelization <- df_parallelization$time_par
+time_without_parallel <- df_parallelization$time_without_parallel
+time_without_future <- df_parallelization$time_without_future
+time_with_parallel <- df_parallelization$time_with_parallel
+time_with_future <- df_parallelization$time_with_future
 ```
 
 The [**flipr**](https://permaverse.github.io/flipr/) package uses functions
@@ -25,13 +27,21 @@ user side. We illustrate here how to achieve asynchronous evaluation. We use the
 [**future**](https://future.futureverse.org/index.html) package to set the plan,
 the **parallel** package to define a default cluster, and the
 [**progressr**](https://progressr.futureverse.org/index.html) package to report
-progress updates.
+progress updates. 
+
+More precisely, setting a default cluster with **parallel** is useful to allow 
+parallel computation of the point estimate if an estimation is needed. On the 
+other side, setting the plan with 
+[**future**](https://future.futureverse.org/index.html) allows parallel 
+computation when evaluating the plausibility function. A comparison of
+computation time with sequential and parallel computation for those two cases is
+done in the following.
 
 ## Computation without parallel processing
 
 To show the benefit of parallel processing, we compare here the processing times
-necessary to evaluate a grid with a plausibility function. First, here is the
-computation without parallelization.
+necessary to compute a point estimation and to evaluate the grid for a 
+plausibility function. First, here is the computation without parallelization.
 
 ```{r, eval=FALSE}
 set.seed(1234)
@@ -51,7 +61,17 @@ pf <- PlausibilityFunction$new(
   x, y
 )
 
-pf$set_point_estimate(mean(y) - mean(x), overwrite = TRUE)
+tic()
+pf$set_point_estimate()
+time_without_parallel <- toc()$callback_msg
+```
+
+```{r}
+time_without_parallel
+```
+
+```{r, eval=FALSE}
+
 pf$set_parameter_bounds(
   point_estimate = pf$point_estimate, 
   conf_level = pf$max_conf_level
@@ -63,11 +83,11 @@ pf$set_grid(
 
 tictoc::tic()
 pf$evaluate_grid(grid = pf$grid)
-time_without_parallelization <- tictoc::toc()
+time_without_future <- tictoc::toc()$callback_msg
 ```
 
 ```{r}
-time_without_parallelization 
+time_without_future
 ```
 
 ## Computation with parallel processing
@@ -83,8 +103,8 @@ following code with the `progressr::handlers()` function. After these settings,
 in this example.
 
 ```{r, eval=FALSE}
-ncores <- 4
-future::plan(multisession, workers = ncores)
+ncores <- 3
+future::plan(future::multisession, workers = ncores)
 cl <- parallel::makeCluster(ncores)
 parallel::setDefaultCluster(cl)
 progressr::handlers(global = TRUE)
@@ -106,7 +126,16 @@ pf <- PlausibilityFunction$new(
   x, y
 )
 
-pf$set_point_estimate(mean(y) - mean(x), overwrite = TRUE)
+tic()
+pf$set_point_estimate()
+time_with_parallel <- toc()$callback_msg
+```
+
+```{r}
+time_with_parallel
+```
+
+```{r, eval=FALSE}
 pf$set_parameter_bounds(
   point_estimate = pf$point_estimate, 
   conf_level = pf$max_conf_level
@@ -118,7 +147,7 @@ pf$set_grid(
 
 tictoc::tic()
 pf$evaluate_grid(grid = pf$grid)
-time_with_parallelization <- tictoc::toc()
+time_with_future <- tictoc::toc()$callback_msg
 
 parallel::stopCluster(cl)
 ```
@@ -127,18 +156,19 @@ It is good practice to shut down the workers with the `parallel::stopCluster()`
 function at the end of the code.
 
 ```{r}
-time_with_parallelization
+time_with_future
 ```
 
 This experiment proves that we can save a lot of computation time when using
-parallel processing, as we gained approximately 33 seconds in this example to
-evaluate the plausibility function.
+parallel processing. Indeed, by setting 3 cores for each of the parallel 
+processing tools, we reduced approximately by 3 times the computation time for 
+both computing a point estimation and evaluating the plausibility function.
 
 Finally, to return to a sequential plan with no progress updates, the following
 code can be used.
 
 ```{r, eval=FALSE}
-future::plan(sequential)
+future::plan(future::sequential)
 parallel::setDefaultCluster(NULL)
 progressr::handlers(global = FALSE)
 ```
