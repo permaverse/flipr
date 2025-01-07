@@ -27,15 +27,7 @@ the **parallel** package to define a default cluster, and the
 [**progressr**](https://progressr.futureverse.org/index.html) package to report
 progress updates.
 
-By setting the desired number of cores, we define the number of background R
-sessions that will be used to evaluate expressions in parallel. This number is
-used to set the multisession plan with the function `future::plan()` and to
-define a default cluster with `parallel::setDefaultCluster()`. Then, to enable
-the visualization of evaluation progress, we can put the code in the
-`progressr::with_progress()` function, or more simply set it for all the
-following code with the `progressr::handlers()` function. After these settings,
-[**flipr**](https://permaverse.github.io/flipr/) functions can be used, as shown
-in this example.
+## Computation without parallel processing
 
 To show the benefit of parallel processing, we compare here the processing times
 necessary to evaluate a grid with a plausibility function. First, here is the
