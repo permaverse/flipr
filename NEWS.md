@@ -62,7 +62,7 @@ R-release due to pandoc version not available preventing the `pvalue-function` v
 test is performed.
 * Add a function to compute p-value functions for sets of null hypotheses.
 * Draft of article illustrating the computation of p-value functions with
-[**flipr**](https://lmjl-alea.github.io/flipr/).
+[**flipr**](https://permaverse.github.io/flipr/).
 * Add $t$, mean and Fisher test statistics.
 * Correct two-tail p-value computation.
 * Better API for pvalue function.

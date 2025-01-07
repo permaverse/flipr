@@ -1,26 +1,26 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Overview <a href='https://lmjl-alea.github.io/flipr/'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# Overview <a href='https://permaverse.github.io/flipr/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/LMJL-Alea/flipr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LMJL-Alea/flipr/actions/workflows/R-CMD-check.yaml)
-[![test-coverage](https://github.com/LMJL-Alea/flipr/workflows/test-coverage/badge.svg)](https://github.com/LMJL-Alea/flipr/actions)
+[![R-CMD-check](https://github.com/permaverse/flipr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/permaverse/flipr/actions/workflows/R-CMD-check.yaml)
+[![test-coverage](https://github.com/permaverse/flipr/workflows/test-coverage/badge.svg)](https://github.com/permaverse/flipr/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/LMJL-Alea/flipr/branch/master/graph/badge.svg)](https://codecov.io/gh/LMJL-Alea/flipr?branch=master)
-[![pkgdown](https://github.com/LMJL-Alea/flipr/workflows/pkgdown/badge.svg)](https://github.com/LMJL-Alea/flipr/actions)
+coverage](https://codecov.io/gh/permaverse/flipr/branch/master/graph/badge.svg)](https://codecov.io/gh/permaverse/flipr?branch=master)
+[![pkgdown](https://github.com/permaverse/flipr/workflows/pkgdown/badge.svg)](https://github.com/permaverse/flipr/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/flipr)](https://CRAN.R-project.org/package=flipr)
 <!-- badges: end -->
 
-The goal of the [**flipr**](https://lmjl-alea.github.io/flipr/) package
+The goal of the [**flipr**](https://permaverse.github.io/flipr/) package
 is to provide a flexible framework for making inference via permutation.
 The idea is to promote the permutation framework as an incredibly
 well-suited tool for inference on complex data. You supply your data, as
 complex as it might be, in the form of lists in which each entry stores
 one data point in a representation that suits you and
-[**flipr**](https://lmjl-alea.github.io/flipr/) takes care of the
+[**flipr**](https://permaverse.github.io/flipr/) takes care of the
 permutation magic and provides you with either point estimates or
 confidence regions or $p$-value of hypothesis tests. Permutation tests
 are especially appealing because they are exact no matter how small or
@@ -29,7 +29,7 @@ big your sample sizes are. You can also use the so-called
 statistics to better target the alternative hypothesis you are testing
 against. Asymptotic consistency is also guaranteed under mild conditions
 on the statistic you use. The
-[**flipr**](https://lmjl-alea.github.io/flipr/) package provides a
+[**flipr**](https://permaverse.github.io/flipr/) package provides a
 flexible permutation framework for making inference such as point
 estimation, confidence intervals or hypothesis testing, on any kind of
 data, be it univariate, multivariate, or more complex such as
@@ -38,19 +38,20 @@ data.
 
 ## Installation
 
-You can install the latest stable version of
-[**flipr**](https://lmjl-alea.github.io/flipr/) on CRAN with:
+You can install the package from [CRAN](https://CRAN.R-project.org)
+with:
 
 ``` r
 install.packages("flipr")
 ```
 
-Or you can install the development version from
+Alternatively, You can install the development version of
+[**flipr**](https://permaverse.github.io/flipr/) from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("remotes")
-remotes::install_github("LMJL-Alea/flipr")
+# install.packages("pak")
+pak::pak("permaverse/flipr")
 ```
 
 ## Example
@@ -61,7 +62,7 @@ library(flipr)
 
 We hereby use the very simple t-test for comparing the means of two
 univariate samples to show how easy it is to carry out a permutation
-test with [**flipr**](https://lmjl-alea.github.io/flipr/).
+test with [**flipr**](https://permaverse.github.io/flipr/).
 
 ### Data generation
 
@@ -119,8 +120,8 @@ This statistic can be easily computed using
 `stats::t.test(x, y, var.equal = TRUE)$statistic`. However, we want to
 extend its evaluation to any permuted version of the data. Test
 statistic functions compatible with
-[**flipr**](https://lmjl-alea.github.io/flipr/) should have at least two
-mandatory input arguments:
+[**flipr**](https://permaverse.github.io/flipr/) should have at least
+two mandatory input arguments:
 
 - `data` which is either a concatenated list of size $n_x + n_y$
   regrouping the data points of both samples or a distance matrix of
@@ -131,7 +132,7 @@ mandatory input arguments:
   current permuted version of the data.
 
 Some test statistics are already implemented in
-[**flipr**](https://lmjl-alea.github.io/flipr/) and ready to use.
+[**flipr**](https://permaverse.github.io/flipr/) and ready to use.
 User-defined test statistics can be used as well, with the use of the
 helper function `use_stat(nsamples = 2, stat_name = )`. This function
 creates and saves an `.R` file in the `R/` folder of the current working
@@ -175,7 +176,7 @@ stat_{{{name}}} <- function(data, indices1) {
 ```
 
 For instance, a
-[**flipr**](https://lmjl-alea.github.io/flipr/)-compatible version of
+[**flipr**](https://permaverse.github.io/flipr/)-compatible version of
 the $t$-statistic with pooled variance will look like:
 
 ``` r
@@ -214,7 +215,7 @@ stat_functions <- list(my_t_stat)
 ### Assign test statistics to parameters
 
 Finally we need to define a named list that tells
-[**flipr**](https://lmjl-alea.github.io/flipr/) which test statistics
+[**flipr**](https://permaverse.github.io/flipr/) which test statistics
 among the ones declared in the `stat_functions` list should be used for
 each parameter under investigation. This is used to determine bounds on
 each parameter for the plausibility function. This list, often termed

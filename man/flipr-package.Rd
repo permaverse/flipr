@@ -15,9 +15,9 @@ density-valued data.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://LMJL-Alea.github.io/flipr/}
-  \item \url{https://github.com/LMJL-Alea/flipr/}
-  \item Report bugs at \url{https://github.com/LMJL-Alea/flipr/issues/}
+  \item \url{https://permaverse.github.io/flipr/}
+  \item \url{https://github.com/permaverse/flipr/}
+  \item Report bugs at \url{https://github.com/permaverse/flipr/issues/}
 }
 
 }

@@ -10,3 +10,6 @@
 ^data-raw$
 ^README.md$
 ^CRAN-SUBMISSION$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
