@@ -8,8 +8,8 @@ library(progressr)
 library(tictoc)
 library(flipr)
 
-ngrid_in <- 50L
-nperms <- 5000
+ngrid_in <- 100L
+nperms <- 2000
 n1 <- 10
 set.seed(1234)
 x <- rnorm(n1, mean = 1, sd = 1)
@@ -35,12 +35,12 @@ pf <- PlausibilityFunction$new(
   stat_assignments = stat_assignments,
   x, y
 )
+pf$set_nperms(nperms)
 
 tic()
 pf$set_point_estimate()
 time_without_parallel <- toc()$callback_msg
 
-pf$set_nperms(nperms)
 pf$set_parameter_bounds(
   point_estimate = pf$point_estimate,
   conf_level = pf$max_conf_level
@@ -69,12 +69,12 @@ pf <- PlausibilityFunction$new(
   stat_assignments = stat_assignments,
   x, y
 )
+pf$set_nperms(nperms)
 
 tic()
 pf$set_point_estimate()
 time_with_parallel <- toc()$callback_msg
 
-pf$set_nperms(nperms)
 pf$set_parameter_bounds(
   point_estimate = pf$point_estimate,
   conf_level = pf$max_conf_level

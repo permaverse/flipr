@@ -60,6 +60,7 @@ pf <- PlausibilityFunction$new(
   stat_assignments = stat_assignments,
   x, y
 )
+pf$set_nperms(2000)
 
 tic()
 pf$set_point_estimate()
@@ -71,14 +72,13 @@ time_without_parallel
 ```
 
 ```{r, eval=FALSE}
-
 pf$set_parameter_bounds(
   point_estimate = pf$point_estimate, 
   conf_level = pf$max_conf_level
 )
 pf$set_grid(
   parameters = pf$parameters, 
-  npoints = 50L
+  npoints = 100L
 )
 
 tictoc::tic()
@@ -125,6 +125,7 @@ pf <- PlausibilityFunction$new(
   stat_assignments = stat_assignments,
   x, y
 )
+pf$set_nperms(2000)
 
 tic()
 pf$set_point_estimate()
@@ -142,7 +143,7 @@ pf$set_parameter_bounds(
 )
 pf$set_grid(
   parameters = pf$parameters, 
-  npoints = 50L
+  npoints = 100L
 )
 
 tictoc::tic()
@@ -165,7 +166,7 @@ processing tools, we reduced approximately by 3 times the computation time for
 both computing a point estimation and evaluating the plausibility function.
 
 Finally, to return to a sequential plan with no progress updates, the following
-code can be used.
+code can be used. It also allows to shut down the workers used in [**future**](https://future.futureverse.org/index.html).
 
 ```{r, eval=FALSE}
 future::plan(future::sequential)
