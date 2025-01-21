@@ -298,6 +298,20 @@ PlausibilityFunction <- R6::R6Class(
           combine_with = self$aggregator,
           ...
         )
+      } else if(private$nsamples == 2 && is.factor(private$data[[2]])) {
+        # how can we use the null specification of the value of the parameter?
+        # we test equality of variable means between populations
+        test_result <- anova_test(
+          data = private$data[[1]],
+          memberships = private$data[[2]],
+          stats = private$stat_functions,
+          B = self$nperms,
+          M = self$nperms_max,
+          alternative = self$alternative,
+          type = self$pvalue_formula,
+          combine_with = self$aggregator,
+          ...
+        )
       } else {
         y <- private$null_spec(private$data[[2]], parameters)
         test_result <- two_sample_test(

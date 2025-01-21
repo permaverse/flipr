@@ -24,6 +24,20 @@ convert_to_list <- function(...) {
     return(l)
   }
 
+  # Case of anova: M variables + a factor
+  if (n == 2 && is.factor(l[[2]])) {
+    vars <- l[[1]]
+    coherent_inputs <- TRUE
+    for (i in 1:length(vars)) {
+      if (!is.matrix(vars[[i]]) && !rlang::is_bare_numeric(vars[[i]])) {
+        coherent_inputs <- FALSE
+        break
+      }
+    }
+    stopifnot(coherent_inputs)
+    return(l)
+  }
+
   # Case of univariate data
   if (rlang::is_bare_numeric(l[[1]])) {
     if (n > 1) {
