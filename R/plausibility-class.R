@@ -287,7 +287,7 @@ PlausibilityFunction <- R6::R6Class(
         ))
       withr::local_seed(self$seed)
       if (private$nsamples == 1) {
-        x <- private$null_spec(private$data[[1]], parameters)
+        x <- private$null_spec(unlist(private$data[[1]]), parameters)
         test_result <- one_sample_test(
           x = x,
           stats = private$stat_functions,
@@ -298,9 +298,21 @@ PlausibilityFunction <- R6::R6Class(
           combine_with = self$aggregator,
           ...
         )
-      } else if(private$nsamples == 2 && is.factor(private$data[[2]])) {
-        # how can we use the null specification of the value of the parameter?
-        # we test equality of variable means between populations
+      } else if(private$nsamples == 2) {
+        y <- unlist(private$data[[1]][which(private$data[[2]] == 2)])
+        y <- private$null_spec(y, parameters)
+        test_result <- two_sample_test(
+          x = private$data[[1]][which(private$data[[2]] == 1)],
+          y = y,
+          stats = private$stat_functions,
+          B = self$nperms,
+          M = self$nperms_max,
+          alternative = self$alternative,
+          type = self$pvalue_formula,
+          combine_with = self$aggregator,
+          ...
+        )
+      } else if(private$nsamples > 2) {
         test_result <- anova_test(
           data = private$data[[1]],
           memberships = private$data[[2]],
@@ -312,20 +324,10 @@ PlausibilityFunction <- R6::R6Class(
           combine_with = self$aggregator,
           ...
         )
-      } else {
-        y <- private$null_spec(private$data[[2]], parameters)
-        test_result <- two_sample_test(
-          x = private$data[[1]],
-          y = y,
-          stats = private$stat_functions,
-          B = self$nperms,
-          M = self$nperms_max,
-          alternative = self$alternative,
-          type = self$pvalue_formula,
-          combine_with = self$aggregator,
-          ...
-        )
       }
+
+      #TODO Regression
+
       if (keep_null_distribution && keep_permutations)
         return(test_result)
       else if (keep_null_distribution) {
@@ -681,9 +683,8 @@ PlausibilityFunction <- R6::R6Class(
     nsamples = 2,
     set_data = function(...) {
       private$data <- convert_to_list(...)
-      private$nsamples <- length(private$data)
-      if (private$nsamples > 2)
-        abort("The PlausibilityFunction class currently only support one- and two-sample problems.")
+      private$data[[2]] <- as.factor(private$data[[2]])
+      private$nsamples <- length(levels(private$data[[2]]))
     },
 
     set_nparams = function(val) {

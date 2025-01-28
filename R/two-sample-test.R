@@ -121,9 +121,9 @@ two_sample_test <- function(x, y,
     n1 <- y
     n2 <- n - n1
   } else {
-    l <- convert_to_list(x, y)
-    x <- l[[1]]
-    y <- l[[2]]
+    #l <- convert_to_list(x, y)
+    #x <- l[[1]]
+    #y <- l[[2]]
     n1 <- length(x)
     n2 <- length(y)
     n <- n1 + n2
