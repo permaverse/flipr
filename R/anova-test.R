@@ -87,10 +87,8 @@ anova_test <- function(data, memberships,
                        seed = NULL,
                        ...) {
 
-  print(data)
   if (rlang::is_bare_numeric(data) || is.matrix(data))
     data <- purrr::array_tree(data, margin = 1)
-  print(data)
 
   if (!is.list(data) && !inherits(data, "dist"))
     abort("The {.arg data} argument should be either of class {.cls numeric} or
