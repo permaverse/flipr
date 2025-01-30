@@ -4,6 +4,9 @@ abort <- function(msg) {
 }
 
 # convert data to flipr format
+# for distance matrix:
+# returns list(distance matrix, group memberships)
+# for other data types:
 # returns list(list(vars), group memberships) for 1-sample, 2-sample or ANOVA
 # returns list(list(response var), list(qualitative vars) , list(other vars)) for regression
 convert_to_list <- function(..., flag_anova = FALSE) {
@@ -12,6 +15,11 @@ convert_to_list <- function(..., flag_anova = FALSE) {
 
   # Case "No input samples"
   if (n == 0) return(NULL)
+
+  # Case of already in the flipr format
+  if (is_flipr_format(...)) {
+    return(l)
+  }
 
   # Case of (M)ANOVA with a factor as second argument
   if (n == 2 && is.factor(l[[2]])) {
@@ -23,26 +31,14 @@ convert_to_list <- function(..., flag_anova = FALSE) {
     return(list(convert_to_list(l[[1]], flag_anova = TRUE), l[[2]]))
   }
 
-  # TODO Case of distance matrix
+  # Case of distance matrix
   if (inherits(l[[1]], "dist")) {
-    if (n == 1) {
-      n_sample <- length(l[[1]])
-      return(list(l, rep(1, n_sample)))
+    if (n != 2 || (!is.factor(l[[2]]) && !is.integer(l[[2]]))) {
+      abort("When using distance matrix, user should pass to flipr one distance matrix with all observations
+            and a vector indicating class memberships.")
     }
     coherent_inputs <- TRUE
-    for (i in 2:n) {
-      if (!is.integer(l[[i]])) {
-        coherent_inputs <- FALSE
-        break
-      }
-    }
-    stopifnot(coherent_inputs)
-    # how do we do that for distance matrix?
-    # new_data <- dplyr::bind_rows(l, .id = "memberships")
-    # new_factor <- as.integer(new_data$memberships)
-    # new_data <-dplyr::select(out, - memberships)
-    # return(list(new_data, new_factor))
-    return(l)
+    return(list(l[[1]], as.factor(l[[2]])))
   }
 
   # Case of univariate data
@@ -107,7 +103,7 @@ convert_to_list <- function(..., flag_anova = FALSE) {
     return(c(new_data, list(new_factor)))
   }
 
-  # TODO Regression
+  # TODO Case regression
 
   # Case of other objects contained in lists
   if (is.list(l[[1]])) {
@@ -141,6 +137,21 @@ convert_to_list <- function(..., flag_anova = FALSE) {
   stopifnot(coherent_inputs)
 
   l
+}
+
+is_flipr_format <- function(...) {
+  l <- rlang::list2(...)
+  n <- length(l)
+  # data format for k-sample tests
+  if(n == 2 && is.factor(l[[2]]) && is.list(l[[1]]) && length(l[[2]]) == length(l[[1]])) {
+    return(TRUE)
+  # data format for distance matrix
+  } else if (n == 2 && is.factor(l[[2]]) && inherits(l[[1]], "dist")) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+  # TODO for regression
 }
 
 

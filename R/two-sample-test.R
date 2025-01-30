@@ -120,10 +120,15 @@ two_sample_test <- function(x, y,
     n <- attr(x, "Size")
     n1 <- y
     n2 <- n - n1
+  } else if (!is.list(x)) {
+    l <- convert_to_list(x, y)
+    x <- l[[1]][which(l[[2]] == 1)]
+    y <- l[[1]][which(l[[2]] == 1)]
+    n1 <- length(x)
+    n2 <- length(y)
+    n <- n1 + n2
+    stat_data <- c(x, y)
   } else {
-    #l <- convert_to_list(x, y)
-    #x <- l[[1]]
-    #y <- l[[2]]
     n1 <- length(x)
     n2 <- length(y)
     n <- n1 + n2
@@ -138,7 +143,7 @@ two_sample_test <- function(x, y,
   # Generate permutation data
   if (M <= B) {
     B <- M
-    perm_data <- utils::combn(n, n1)[, 1:B + 1]
+    perm_data <- utils::combn(n, n1)[, 1:B + 1] # error here
   } else {
     perm_data <- replicate(B, sample.int(n))[1:n1, ]
   }
