@@ -23,10 +23,8 @@ convert_to_list <- function(..., flag_anova = FALSE) {
 
   # Case of (M)ANOVA with a factor as second argument
   if (n == 2 && is.factor(l[[2]])) {
-    if (is.list(l[[1]][[1]])) {
-      new_data <- as.data.frame(l[[1]])
-      colnames(new_data) <- NULL
-      return(list(convert_to_list(list(new_data), flag_anova = TRUE)[[1]], l[[2]]))
+    if (is.matrix(l[[1]]) || is.data.frame(l[[1]])) {
+      return(list(convert_to_list(l[[1]], flag_anova = TRUE)[[1]], l[[2]]))
     }
     return(list(convert_to_list(l[[1]], flag_anova = TRUE), l[[2]]))
   }

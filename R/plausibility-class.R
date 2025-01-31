@@ -313,6 +313,7 @@ PlausibilityFunction <- R6::R6Class(
           ...
         )
       } else if(private$nsamples > 2) {
+        #TODO using null_spec and parameters
         test_result <- anova_test(
           data = private$data[[1]],
           memberships = private$data[[2]],
@@ -683,7 +684,7 @@ PlausibilityFunction <- R6::R6Class(
     nsamples = 2,
     set_data = function(...) {
       private$data <- convert_to_list(...)
-      private$data[[2]] <- as.factor(private$data[[2]])
+      private$data[[2]] <- as.factor(as.numeric(private$data[[2]]))
       private$nsamples <- length(levels(private$data[[2]]))
     },
 
