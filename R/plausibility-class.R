@@ -313,10 +313,17 @@ PlausibilityFunction <- R6::R6Class(
           ...
         )
       } else if(private$nsamples > 2) {
-        #TODO using null_spec and parameters
+        memberships <- private$data[[2]]
+        data <- unlist(private$data[[1]])
+        samples <- purrr::map(unique(as.numeric(memberships)), \(.class) {
+          data[which(as.numeric(memberships) == .class)]
+        })
+        # we give to null_spec all samples except the first one
+        samples <- c(list(samples[[1]]), private$null_spec(samples[-c(1)], parameters))
+
         test_result <- anova_test(
-          data = private$data[[1]],
-          memberships = private$data[[2]],
+          data = unlist(samples),
+          memberships = memberships,
           stats = private$stat_functions,
           B = self$nperms,
           M = self$nperms_max,
