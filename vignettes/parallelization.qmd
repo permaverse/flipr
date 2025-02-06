@@ -1,11 +1,15 @@
 ---
 title: "Parallel processing"
-output: rmarkdown::html_vignette
+format: 
+  html:
+    toc: true
+    html-math-method: mathjax
 vignette: >
-  %\VignetteIndexEntry{parallelization}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Parallel processing}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

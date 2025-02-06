@@ -1,12 +1,16 @@
 ---
 title: "Computing plausibility functions"
-output: rmarkdown::html_vignette
+format: 
+  html:
+    toc: true
+    html-math-method: mathjax
 vignette: >
   %\VignetteIndexEntry{Computing plausibility functions}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib
 ---
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

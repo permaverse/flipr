@@ -87,7 +87,7 @@ anova_test <- function(data, memberships,
                        seed = NULL,
                        ...) {
 
-  if (rlang::is_bare_numeric(data) || is.matrix(data))
+  if (rlang::is_bare_numeric(data) || is.matrix(data) || is.data.frame(data))
     data <- purrr::array_tree(data, margin = 1)
 
   if (!is.list(data) && !inherits(data, "dist"))

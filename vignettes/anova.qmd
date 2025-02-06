@@ -1,0 +1,202 @@
+---
+title: "Performing ANOVA"
+format: 
+  html:
+    toc: true
+    html-math-method: mathjax
+vignette: >
+  %\VignetteIndexEntry{Performing ANOVA}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(flipr)
+library(ggplot2)
+load("../R/sysdata.rda")
+
+pvalue1 <- df_1anova$pvalue
+point_estimate1 <- df_1anova$point_estimate
+grid1 <- df_1anova$grid
+
+pvalue2 <- df_2anova$pvalue
+point_estimate2 <- df_2anova$point_estimate
+grid2 <- df_2anova$grid
+```
+
+The package allows user to perform (M)-ANOVA. Two examples are shown in this
+article for more clarity. User can pass data in the plausibility function as two
+possible format:
+
+- An object with all samples and a factor containing group memberships.
+- Each sample representing a group.
+
+Both cases will appear in this article.
+
+## Plausibility function for 1-ANOVA
+
+For this example, data represent chicken weights by feed type. The null 
+hypothesis is 
+$$
+H_0: \mu_1 = \mu_2 = \mu_3
+$$
+with $\mu_i$ representing the sample mean in the group $i$.
+
+```{r, eval=FALSE}
+data <- chickwts$weight[1:36] # 1 variable
+memberships <- as.factor(chickwts$feed[1:36]) # 1 factor with 3 populations
+
+# takes all samples except the first one
+null_spec <- function(l, parameters) {
+  purrr::map2(l, parameters, \(l, param) l - param)
+}
+stat_functions <- list(stat_anova_f)
+
+# all means except first one
+stat_assignments <- list(mu2 = 1, mu3 = 1)
+
+pf <- PlausibilityFunction$new(
+  null_spec = null_spec,
+  stat_functions = stat_functions,
+  stat_assignments = stat_assignments,
+  data, memberships
+)
+
+pvalue1 <- pf$get_value(rep(0, 2))
+```
+
+```{r}
+pvalue1
+```
+
+```{r, eval=FALSE}
+samples <- purrr::map(unique(as.numeric(memberships)), \(.class) {
+  data[which(as.numeric(memberships) == .class)]
+})
+means <- c(mean(samples[[2]]) - mean(samples[[1]]),
+           mean(samples[[3]]) - mean(samples[[1]]))
+pf$set_point_estimate(means)
+point_estimate1 <- pf$point_estimate
+```
+
+```{r}
+point_estimate1
+```
+
+```{r, eval=FALSE}
+pf$set_parameter_bounds(
+  point_estimate = pf$point_estimate,
+  conf_level = pf$max_conf_level
+)
+
+pf$set_grid(
+  parameters = pf$parameters,
+  npoints = 10
+)
+pf$evaluate_grid(grid = pf$grid)
+grid1 <- pf$grid
+```
+
+```{r}
+grid1 %>% 
+  ggplot(aes(mu2, mu3, z = pvalue)) + 
+  geom_contour_filled(binwidth = 0.05) + 
+  labs(
+    title = "Contour plot of the p-value surface", 
+    subtitle = "Using Fisher's non-parametric combination", 
+    x = expression(paste(mu, "_2")), 
+    y = expression(paste(mu, "_3")), 
+    fill = "p-value"
+  ) + 
+  theme_minimal()
+```
+
+
+## Plausibility function for 2-ANOVA
+
+In this example, data used represent flower caracteristics by their specie.
+The null hypothesis is 
+$$
+H_0: \begin{pmatrix}
+\mu_{11} \\
+\mu_{12}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+\mu_{21} \\
+\mu_{22}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+\mu_{31} \\
+\mu_{32}
+\end{pmatrix}
+$$
+with $\mu_{ij}$ representing the sample mean in the group $i$ for the variable 
+$j$.
+
+```{r, eval=FALSE}
+n <- 10
+x1 <- rnorm(n = n, mean = 0, sd = 1)
+x2 <- rnorm(n = n, mean = 1, sd = 1)
+x3 <- rnorm(n = n, mean = 2, sd = 1)
+x4 <- rnorm(n = n, mean = 3, sd = 1)
+
+# takes all samples except the first one
+null_spec <- function(l, parameters) {
+  purrr::map2(l, parameters, \(l, param) l - param)
+}
+stat_functions <- list(stat_anova_f)
+
+# all means except first one
+stat_assignments <- list(mu2 = 1, mu3 = 1, mu4 = 1)
+
+pf <- PlausibilityFunction$new(
+  null_spec = null_spec,
+  stat_functions = stat_functions,
+  stat_assignments = stat_assignments,
+  x1, x2, x3, x4
+)
+pvalue2 <- pf$get_value(rep(0, 3))
+```
+
+```{r}
+pvalue2
+```
+
+```{r, eval=FALSE}
+means <- c(mean(x2) - mean(x1),
+           mean(x3) - mean(x1),
+           mean(x4) - mean(x1))
+pf$set_point_estimate(means)
+point_estimate2 <- pf$point_estimate
+```
+
+```{r}
+point_estimate2
+```
+
+```{r, eval=FALSE}
+pf$set_parameter_bounds(
+  point_estimate = pf$point_estimate,
+  conf_level = pf$max_conf_level
+)
+
+pf$set_grid(
+  parameters = pf$parameters,
+  npoints = 10
+)
+pf$evaluate_grid(grid = pf$grid)
+grid2 <- pf$grid
+```
+
+```{r}
+grid2 |> dplyr::filter(pvalue > 0.99)
+```
+
+
+

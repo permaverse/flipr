@@ -314,15 +314,26 @@ PlausibilityFunction <- R6::R6Class(
         )
       } else if(private$nsamples > 2) {
         memberships <- private$data[[2]]
-        data <- unlist(private$data[[1]])
+        data <- private$data[[1]]
+
         samples <- purrr::map(unique(as.numeric(memberships)), \(.class) {
-          data[which(as.numeric(memberships) == .class)]
+          if (length(data[[1]]) == 1) {
+            as.numeric(data[which(as.numeric(memberships) == .class)])
+          }
+          else {
+            l <- data[which(as.numeric(memberships) == .class)]
+            data.frame(matrix(unlist(l), nrow = length(l), byrow = TRUE))
+          }
         })
+
         # we give to null_spec all samples except the first one
         samples <- c(list(samples[[1]]), private$null_spec(samples[-c(1)], parameters))
 
+        if (rlang::is_bare_numeric(samples[[1]])) data <- unlist(samples)
+        else data <- do.call(rbind.data.frame, samples)
+
         test_result <- anova_test(
-          data = unlist(samples),
+          data = data,
           memberships = memberships,
           stats = private$stat_functions,
           B = self$nperms,

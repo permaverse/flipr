@@ -1,12 +1,16 @@
 ---
 title: "On the exactness of permutation tests"
-output: rmarkdown::html_vignette
+format: 
+  html:
+    toc: true
+    html-math-method: mathjax
 vignette: >
   %\VignetteIndexEntry{On the exactness of permutation tests}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib
 ---
+
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
@@ -24,7 +28,7 @@ load("../R/sysdata.rda")
 
 In this article, we discuss the exactness property of permutation tests,
 which is closely related to how $p$-values are computed from the
-permutations. This article is a summary of the paper by @phipson2010.
+permutations. This article is a summary of the paper by [@phipson2010].
 
 ## Traditional formulation of a statistical test
 
@@ -302,6 +306,6 @@ $p_e$ yields an exact test. This is by design since $p_e$ is a genuine
 probability hence it is uniformly distributed on $(0,1)$ under the null
 hypothesis. We also observe that the upper bound $p_u$ is very close to the exact p-value $p_e$.
 
-Of course, one might criticize this simulation in which the number of permutations $m$ has been chosen small on purpose to prove our point. In effect, when $m$ is larger, all formulae to compute the p-value yield an asymptotically exact test. Quoting @phipson2010, *while this is true, the urgent need to avoid small $m$ disappears when the exact p-value $p_e$ is used in place of $\widehat{p_\infty}$, because $p_e$ ensures a valid statistical test regardless of the sample sizes or the number of permutations. When exact p-values are used, the only penalty for choosing $m$ small is a loss of statistical power to reject the null hypothesis. This is as it should be: more permutations should generally provide greater power*.
+Of course, one might criticize this simulation in which the number of permutations $m$ has been chosen small on purpose to prove our point. In effect, when $m$ is larger, all formulae to compute the p-value yield an asymptotically exact test. Quoting [@phipson2010], *while this is true, the urgent need to avoid small $m$ disappears when the exact p-value $p_e$ is used in place of $\widehat{p_\infty}$, because $p_e$ ensures a valid statistical test regardless of the sample sizes or the number of permutations. When exact p-values are used, the only penalty for choosing $m$ small is a loss of statistical power to reject the null hypothesis. This is as it should be: more permutations should generally provide greater power*.
 
 ## References

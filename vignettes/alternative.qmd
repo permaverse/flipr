@@ -1,12 +1,16 @@
 ---
 title: "The alternative hypothesis in permutation testing"
-output: rmarkdown::html_vignette
+format: 
+  html:
+    toc: true
+    html-math-method: mathjax
 vignette: >
   %\VignetteIndexEntry{The alternative hypothesis in permutation testing}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib
 ---
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -26,7 +30,7 @@ root of the framework in the specification of the null and alternative
 hypothesis. First, we review the traditional approach to NHST. Second we
 explain how the use of the permutation framework requires particular
 care when formulating the null and alternative hypotheses. Finally, we
-will discuss an approach proposed by @pesarin2010, coined
+will discuss an approach proposed by [@pesarin2010], coined
 **Non-Parametric Combination** (NPC), which allows one to combine
 several test statistics into a single test.
 
