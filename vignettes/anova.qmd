@@ -20,30 +20,36 @@ library(ggplot2)
 load("../R/sysdata.rda")
 
 pvalue1 <- df_1anova$pvalue
+pvalue1_est <- df_1anova$pvalue_est
 point_estimate1 <- df_1anova$point_estimate
 grid1 <- df_1anova$grid
 
 pvalue2 <- df_2anova$pvalue
+pvalue2_est <- df_2anova$pvalue_est
 point_estimate2 <- df_2anova$point_estimate
 grid2 <- df_2anova$grid
 ```
 
 The package allows user to perform (M)-ANOVA. Two examples are shown in this
 article for more clarity. User can pass data in the plausibility function as two
-possible format:
+possible formats:
 
 - An object with all samples and a factor containing group memberships.
 - Each sample representing a group.
 
-Both cases will appear in this article.
+Both cases will appear in this article. Since we use Fisher tests, it is 
+important to change the `alternative` parameter of the plausibility function to
+`right_tail`.
 
-## Plausibility function for 1-ANOVA
+## Plausibility function for 1-ANOVA 🐓
 
-For this example, data represent chicken weights by feed type. The null 
-hypothesis is 
+For this example, data represent chicken weights by feed type. There are three
+populations that have been fed different types of food. The null hypothesis is 
+
 $$
 H_0: \mu_1 = \mu_2 = \mu_3
 $$
+
 with $\mu_i$ representing the sample mean in the group $i$.
 
 ```{r, eval=FALSE}
@@ -65,6 +71,7 @@ pf <- PlausibilityFunction$new(
   stat_assignments = stat_assignments,
   data, memberships
 )
+pf$set_alternative("right_tail")
 
 pvalue1 <- pf$get_value(rep(0, 2))
 ```
@@ -79,6 +86,14 @@ samples <- purrr::map(unique(as.numeric(memberships)), \(.class) {
 })
 means <- c(mean(samples[[2]]) - mean(samples[[1]]),
            mean(samples[[3]]) - mean(samples[[1]]))
+pvalue1_est <- pf$get_value(means)
+```
+
+```{r}
+pvalue1_est
+```
+
+```{r, eval=FALSE}
 pf$set_point_estimate(means)
 point_estimate1 <- pf$point_estimate
 ```
@@ -116,10 +131,12 @@ grid1 %>%
 ```
 
 
-## Plausibility function for 2-ANOVA
+## Plausibility function for 2-ANOVA 🌸
 
-In this example, data used represent flower caracteristics by their specie.
-The null hypothesis is 
+In this example, data used represent flower caracteristics by their specie. The 
+variables are sepal length and sepal width that are compared bewteen three 
+different flower species. The null hypothesis is 
+
 $$
 H_0: \begin{pmatrix}
 \mu_{11} \\
@@ -136,6 +153,7 @@ H_0: \begin{pmatrix}
 \mu_{32}
 \end{pmatrix}
 $$
+
 with $\mu_{ij}$ representing the sample mean in the group $i$ for the variable 
 $j$.
 
@@ -169,6 +187,8 @@ pf <- PlausibilityFunction$new(
   stat_assignments = stat_assignments,
   iris_setosa, iris_versicolor, iris_virginica
 )
+pf$set_alternative("right_tail")
+
 pvalue2 <- pf$get_value(rep(0, 4))
 ```
 
@@ -185,6 +205,14 @@ d2 <- c(
   mean(iris_virginica$Sepal.Length) - mean(iris_setosa$Sepal.Length),
   mean(iris_virginica$Sepal.Width)  - mean(iris_setosa$Sepal.Width)
 )
+pvalue1_est <- pf$get_value(c(d1, d2))
+```
+
+```{r}
+pvalue1_est
+```
+
+```{r, eval=FALSE}
 pf$set_point_estimate(c(d1, d2))
 point_estimate2 <- pf$point_estimate
 ```
@@ -209,8 +237,19 @@ grid2 <- pf$grid
 ```
 
 ```{r}
-grid2 |> dplyr::filter(pvalue > 0.90)
+grid2 |> dplyr::filter(pvalue > 0.99)
 ```
+
+
+## Conclusion
+
+For these two examples, means are different in each population. Thus, when we 
+test the equality of means with `get_value(0)`, we get a pvalue close to 0, 
+allowing us to reject the hypothesis that the means are equal within the 
+different populations. On the other hand, if we get the pvalue for the test on 
+the estimator values, it is equal to 1, the largest possible value, which is 
+coherent.
+
 
 
 

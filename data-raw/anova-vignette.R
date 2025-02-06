@@ -13,7 +13,6 @@ plan(multisession, workers = ncores)
 cl <- makeCluster(ncores)
 setDefaultCluster(cl)
 
-
 # 1-ANOVA -------------------------------------------------------------------
 
 data <- chickwts$weight[1:36] # 1 variable
@@ -34,6 +33,7 @@ pf <- PlausibilityFunction$new(
   stat_assignments = stat_assignments,
   data, memberships
 )
+pf$set_alternative("right_tail")
 
 samples <- purrr::map(unique(as.numeric(memberships)), \(.class) {
   data[which(as.numeric(memberships) == .class)]
@@ -53,8 +53,8 @@ pf$evaluate_grid(grid = pf$grid)
 
 out <- list(
   pvalue = pf$get_value(rep(0, 2)),
+  pvalue_est = pf$get_value(means),
   point_estimate = pf$point_estimate,
-  parameters = pf$parameters,
   grid = pf$grid
 )
 
@@ -92,6 +92,7 @@ pf <- PlausibilityFunction$new(
   stat_assignments = stat_assignments,
   iris_setosa, iris_versicolor, iris_virginica
 )
+pf$set_alternative("right_tail")
 
 d1 <- c(
   mean(iris_versicolor$Sepal.Length) - mean(iris_setosa$Sepal.Length),
@@ -117,8 +118,8 @@ pf$evaluate_grid(grid = pf$grid)
 
 out <- list(
   pvalue = pf$get_value(rep(0, 4)),
+  pvalue_est = pf$get_value(c(d1, d2)),
   point_estimate = pf$point_estimate,
-  parameters = pf$parameters,
   grid = pf$grid
 )
 
