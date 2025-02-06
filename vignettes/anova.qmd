@@ -140,28 +140,36 @@ with $\mu_{ij}$ representing the sample mean in the group $i$ for the variable
 $j$.
 
 ```{r, eval=FALSE}
-n <- 10
-x1 <- rnorm(n = n, mean = 0, sd = 1)
-x2 <- rnorm(n = n, mean = 1, sd = 1)
-x3 <- rnorm(n = n, mean = 2, sd = 1)
-x4 <- rnorm(n = n, mean = 3, sd = 1)
+iris_setosa <- iris |> filter(Species == "setosa")
+iris_setosa <- iris_setosa[1:10,1:2]
+iris_versicolor <- iris |> filter(Species == "versicolor")
+iris_versicolor <- iris_versicolor[1:10,1:2]
+iris_virginica <- iris |> filter(Species == "virginica")
+iris_virginica <- iris_virginica[1:10,1:2]
 
 # takes all samples except the first one
 null_spec <- function(l, parameters) {
-  purrr::map2(l, parameters, \(l, param) l - param)
+  parameters <- split(parameters, ceiling(seq_along(parameters) / (length(parameters)/length(l))))
+  purrr::map2(l, parameters, \(group, params) {
+    purrr::map2(group, params, \(var, param) {
+      var - param
+    }) |> as.data.frame()
+  })
 }
 stat_functions <- list(stat_anova_f)
 
-# all means except first one
-stat_assignments <- list(mu2 = 1, mu3 = 1, mu4 = 1)
+# all means except ones from first sample
+stat_assignments <- list(
+  mu2_1 = 1, mu2_2 = 1,
+  mu3_1 = 1, mu3_2 = 1)
 
 pf <- PlausibilityFunction$new(
   null_spec = null_spec,
   stat_functions = stat_functions,
   stat_assignments = stat_assignments,
-  x1, x2, x3, x4
+  iris_setosa, iris_versicolor, iris_virginica
 )
-pvalue2 <- pf$get_value(rep(0, 3))
+pvalue2 <- pf$get_value(rep(0, 4))
 ```
 
 ```{r}
@@ -169,10 +177,15 @@ pvalue2
 ```
 
 ```{r, eval=FALSE}
-means <- c(mean(x2) - mean(x1),
-           mean(x3) - mean(x1),
-           mean(x4) - mean(x1))
-pf$set_point_estimate(means)
+d1 <- c(
+  mean(iris_versicolor$Sepal.Length) - mean(iris_setosa$Sepal.Length),
+  mean(iris_versicolor$Sepal.Width)  - mean(iris_setosa$Sepal.Width)
+)
+d2 <- c(
+  mean(iris_virginica$Sepal.Length) - mean(iris_setosa$Sepal.Length),
+  mean(iris_virginica$Sepal.Width)  - mean(iris_setosa$Sepal.Width)
+)
+pf$set_point_estimate(c(d1, d2))
 point_estimate2 <- pf$point_estimate
 ```
 
@@ -191,11 +204,12 @@ pf$set_grid(
   npoints = 10
 )
 pf$evaluate_grid(grid = pf$grid)
+
 grid2 <- pf$grid
 ```
 
 ```{r}
-grid2 |> dplyr::filter(pvalue > 0.99)
+grid2 |> dplyr::filter(pvalue > 0.90)
 ```
 
 
