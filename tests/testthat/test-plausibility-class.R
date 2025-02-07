@@ -113,35 +113,67 @@ test_that("Regular test - Almost constant series x1 and x2", {
   expect_gt(actual, expected)
 })
 
-# test_that("Regulat test - Three populations with different means", {
-#   # Arrange
-#   set.seed(123)
-#   n <- 15
-#   x1 <- rnorm(n = n, mean = 0, sd = 1)
-#   x2 <- rnorm(n = n, mean = 1, sd = 1)
-#   x3 <- rnorm(n = n, mean = 2, sd = 1)
-#   d <- mean(x2) - sd(x2) * mean(x1) / sd(x1)
-#   r <- sd(x2) / sd(x1)
-#   null_spec <- function(y, parameters) {
-#     purrr::map(y, ~ (.x - parameters[1]) / parameters[2])
-#   }
-#   stat_functions <- list(stat_t, stat_f)
-#   stat_assignments <- list(delta = 1:2, rho = 2)
-#
-#   pf <- PlausibilityFunction$new(
-#     null_spec = null_spec,
-#     stat_functions = stat_functions,
-#     stat_assignments = stat_assignments,
-#     x1, x2,
-#     seed = 1234
-#   )
-#
-#   # Act
-#   actual <- pf$get_value(c(d, r))
-#
-#   expected <- 0.99
-#   expect_gt(actual, expected)
-# })
+test_that("Regulat test - Three populations with different means", {
+  # Arrange
+  set.seed(123)
+  n <- 15
+  x1 <- rnorm(n = n, mean = 0, sd = 1)
+  x2 <- rnorm(n = n, mean = 1, sd = 1)
+  x3 <- rnorm(n = n, mean = 2, sd = 1)
+  d <- c(mean(x2) - mean(x1), mean(x3) - mean(x1))
+  null_spec <- function(l, parameters) {
+    purrr::map2(l, parameters, \(l, param) l - param)
+  }
+  stat_functions <- list(stat_anova_f)
+  stat_assignments <- list(mu2 = 1, mu3 = 1)
+
+  pf <- PlausibilityFunction$new(
+    null_spec = null_spec,
+    stat_functions = stat_functions,
+    stat_assignments = stat_assignments,
+    x1, x2, x3,
+    seed = 1234
+  )
+  pf$set_alternative("right_tail")
+
+  # Act
+  actual <- pf$get_value(d)
+
+  # Assert
+  expected <- 0.99
+  expect_gt(actual, expected)
+})
+
+test_that("Regulat test - Three multivariate populations with different means", {
+  # Arrange
+  set.seed(123)
+  n <- 15
+  x1 <- rnorm(n = n, mean = 0, sd = 1)
+  x2 <- rnorm(n = n, mean = 1, sd = 1)
+  x3 <- rnorm(n = n, mean = 2, sd = 1)
+  d <- c(mean(x2) - mean(x1), mean(x3) - mean(x1))
+  null_spec <- function(l, parameters) {
+    purrr::map2(l, parameters, \(l, param) l - param)
+  }
+  stat_functions <- list(stat_anova_f)
+  stat_assignments <- list(mu2 = 1, mu3 = 1)
+
+  pf <- PlausibilityFunction$new(
+    null_spec = null_spec,
+    stat_functions = stat_functions,
+    stat_assignments = stat_assignments,
+    x1, x2, x3,
+    seed = 1234
+  )
+  pf$set_alternative("right_tail")
+
+  # Act
+  actual <- pf$get_value(d)
+
+  # Assert
+  expected <- 0.99
+  expect_gt(actual, expected)
+})
 
 # Snapshot tests ----------------------------------------------------------
 
