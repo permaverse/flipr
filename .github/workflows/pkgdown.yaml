@@ -31,11 +31,10 @@ jobs:
         with:
           use-public-rspm: true
 
-      - uses: quarto-dev/quarto-actions/setup@v2
-
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, any::knitr, any::rmarkdown, any::downlit, any::xml2,local::.
+          install-quarto: true
+          extra-packages: any::pkgdown,local::.
           needs: website
 
       - name: Build site
