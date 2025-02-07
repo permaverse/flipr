@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/permaverse/flipr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/permaverse/flipr/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/permaverse/flipr/workflows/test-coverage/badge.svg)](https://github.com/permaverse/flipr/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/permaverse/flipr/branch/master/graph/badge.svg)](https://codecov.io/gh/permaverse/flipr?branch=master)
+coverage](https://codecov.io/gh/permaverse/flipr/graph/badge.svg)](https://app.codecov.io/gh/permaverse/flipr)
 [![pkgdown](https://github.com/permaverse/flipr/workflows/pkgdown/badge.svg)](https://github.com/permaverse/flipr/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/flipr)](https://CRAN.R-project.org/package=flipr)
