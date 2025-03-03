@@ -1,0 +1,255 @@
+---
+title: "Performing ANOVA"
+format: 
+  html:
+    toc: true
+    html-math-method: mathjax
+vignette: >
+  %\VignetteIndexEntry{Performing ANOVA}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(flipr)
+library(ggplot2)
+load("../R/sysdata.rda")
+
+pvalue1 <- df_1anova$pvalue
+pvalue1_est <- df_1anova$pvalue_est
+point_estimate1 <- df_1anova$point_estimate
+grid1 <- df_1anova$grid
+
+pvalue2 <- df_2anova$pvalue
+pvalue2_est <- df_2anova$pvalue_est
+point_estimate2 <- df_2anova$point_estimate
+grid2 <- df_2anova$grid
+```
+
+The package allows user to perform (M)-ANOVA. Two examples are shown in this
+article for more clarity. User can pass data in the plausibility function as two
+possible formats:
+
+- An object with all samples and a factor containing group memberships.
+- Each sample representing a group.
+
+Both cases will appear in this article. Since we use Fisher tests, it is 
+important to change the `alternative` parameter of the plausibility function to
+`right_tail`.
+
+## Plausibility function for 1-ANOVA 🐓
+
+For this example, data represent chicken weights by feed type. There are three
+populations that have been fed different types of food. The null hypothesis is 
+
+$$
+H_0: \mu_1 = \mu_2 = \mu_3
+$$
+
+with $\mu_i$ representing the sample mean in the group $i$.
+
+```{r, eval=FALSE}
+data <- chickwts$weight[1:36] # 1 variable
+memberships <- as.factor(chickwts$feed[1:36]) # 1 factor with 3 populations
+
+# takes all samples except the first one
+null_spec <- function(l, parameters) {
+  purrr::map2(l, parameters, \(l, param) l - param)
+}
+stat_functions <- list(stat_anova_f)
+
+# all means except first one
+stat_assignments <- list(mu2 = 1, mu3 = 1)
+
+pf <- PlausibilityFunction$new(
+  null_spec = null_spec,
+  stat_functions = stat_functions,
+  stat_assignments = stat_assignments,
+  data, memberships
+)
+pf$set_alternative("right_tail")
+
+pvalue1 <- pf$get_value(rep(0, 2))
+```
+
+```{r}
+pvalue1
+```
+
+```{r, eval=FALSE}
+samples <- purrr::map(unique(as.numeric(memberships)), \(.class) {
+  data[which(as.numeric(memberships) == .class)]
+})
+means <- c(mean(samples[[2]]) - mean(samples[[1]]),
+           mean(samples[[3]]) - mean(samples[[1]]))
+pvalue1_est <- pf$get_value(means)
+```
+
+```{r}
+pvalue1_est
+```
+
+```{r, eval=FALSE}
+pf$set_point_estimate(means)
+point_estimate1 <- pf$point_estimate
+```
+
+```{r}
+point_estimate1
+```
+
+```{r, eval=FALSE}
+pf$set_parameter_bounds(
+  point_estimate = pf$point_estimate,
+  conf_level = pf$max_conf_level
+)
+
+pf$set_grid(
+  parameters = pf$parameters,
+  npoints = 10
+)
+pf$evaluate_grid(grid = pf$grid)
+grid1 <- pf$grid
+```
+
+```{r}
+grid1 %>% 
+  ggplot(aes(mu2, mu3, z = pvalue)) + 
+  geom_contour_filled(binwidth = 0.05) + 
+  labs(
+    title = "Contour plot of the p-value surface", 
+    subtitle = "Using Fisher's non-parametric combination", 
+    x = expression(paste(mu, "_2")), 
+    y = expression(paste(mu, "_3")), 
+    fill = "p-value"
+  ) + 
+  theme_minimal()
+```
+
+
+## Plausibility function for 2-ANOVA 🌸
+
+In this example, data used represent flower caracteristics by their specie. The 
+variables are sepal length and sepal width that are compared bewteen three 
+different flower species. The null hypothesis is 
+
+$$
+H_0: \begin{pmatrix}
+\mu_{11} \\
+\mu_{12}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+\mu_{21} \\
+\mu_{22}
+\end{pmatrix}
+= 
+\begin{pmatrix}
+\mu_{31} \\
+\mu_{32}
+\end{pmatrix}
+$$
+
+with $\mu_{ij}$ representing the sample mean in the group $i$ for the variable 
+$j$.
+
+```{r, eval=FALSE}
+iris_setosa <- iris |> filter(Species == "setosa")
+iris_setosa <- iris_setosa[1:10,1:2]
+iris_versicolor <- iris |> filter(Species == "versicolor")
+iris_versicolor <- iris_versicolor[1:10,1:2]
+iris_virginica <- iris |> filter(Species == "virginica")
+iris_virginica <- iris_virginica[1:10,1:2]
+
+# takes all samples except the first one
+null_spec <- function(l, parameters) {
+  parameters <- split(parameters, ceiling(seq_along(parameters) / (length(parameters)/length(l))))
+  purrr::map2(l, parameters, \(group, params) {
+    purrr::map2(group, params, \(var, param) {
+      var - param
+    }) |> as.data.frame()
+  })
+}
+stat_functions <- list(stat_anova_f)
+
+# all means except ones from first sample
+stat_assignments <- list(
+  mu2_1 = 1, mu2_2 = 1,
+  mu3_1 = 1, mu3_2 = 1)
+
+pf <- PlausibilityFunction$new(
+  null_spec = null_spec,
+  stat_functions = stat_functions,
+  stat_assignments = stat_assignments,
+  iris_setosa, iris_versicolor, iris_virginica
+)
+pf$set_alternative("right_tail")
+
+pvalue2 <- pf$get_value(rep(0, 4))
+```
+
+```{r}
+pvalue2
+```
+
+```{r, eval=FALSE}
+d1 <- c(
+  mean(iris_versicolor$Sepal.Length) - mean(iris_setosa$Sepal.Length),
+  mean(iris_versicolor$Sepal.Width)  - mean(iris_setosa$Sepal.Width)
+)
+d2 <- c(
+  mean(iris_virginica$Sepal.Length) - mean(iris_setosa$Sepal.Length),
+  mean(iris_virginica$Sepal.Width)  - mean(iris_setosa$Sepal.Width)
+)
+pvalue1_est <- pf$get_value(c(d1, d2))
+```
+
+```{r}
+pvalue1_est
+```
+
+```{r, eval=FALSE}
+pf$set_point_estimate(c(d1, d2))
+point_estimate2 <- pf$point_estimate
+```
+
+```{r}
+point_estimate2
+```
+
+```{r, eval=FALSE}
+pf$set_parameter_bounds(
+  point_estimate = pf$point_estimate,
+  conf_level = pf$max_conf_level
+)
+
+pf$set_grid(
+  parameters = pf$parameters,
+  npoints = 10
+)
+pf$evaluate_grid(grid = pf$grid)
+
+grid2 <- pf$grid
+```
+
+```{r}
+grid2 |> dplyr::filter(pvalue > 0.99)
+```
+
+
+## Conclusion
+
+For these two examples, means are different in each population. Thus, when we 
+test the equality of means with `get_value(0)`, we get a pvalue close to 0, 
+allowing us to reject the hypothesis that the means are equal within the 
+different populations. On the other hand, if we get the pvalue for the test on 
+the estimator values, it is equal to 1, the largest possible value, which is 
+coherent.
+
+
+
+

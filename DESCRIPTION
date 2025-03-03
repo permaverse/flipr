@@ -56,12 +56,13 @@ Suggests:
     interp,
     knitr,
     plotly,
+    quarto,
     rmarkdown,
     testthat (>= 3.0.0),
     tidyr,
     viridis,
     viridisLite
-VignetteBuilder: knitr
+VignetteBuilder: quarto
 URL: https://permaverse.github.io/flipr/, https://github.com/permaverse/flipr/
 BugReports: https://github.com/permaverse/flipr/issues/
 Depends: 

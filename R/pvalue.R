@@ -5,6 +5,8 @@ stats2pvalue <- function(i, Tp, M, type = "exact", alternative = "right_tail") {
   # Tp <- unique(Tp)
   B <- length(Tp) - 1
   # print(B)
+  # print(T0)
+  # print(Tp)
   b <- switch(
     alternative,
     right_tail = sum(Tp > T0),
@@ -23,6 +25,9 @@ get_p <- function(b, B, M, type) {
 }
 
 phipson_smyth_pvalue <- function(b, B, M) {
+  # print(paste("M =", M))
+  # print(paste("b =", b))
+  # print(paste("B =", B))
   if (M <= 10000) {
     pt <- seq_len(M + 1) / (M + 1)
     return(mean(stats::pbinom(q = b, size = B, prob = pt)))

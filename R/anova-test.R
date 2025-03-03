@@ -87,7 +87,7 @@ anova_test <- function(data, memberships,
                        seed = NULL,
                        ...) {
 
-  if (rlang::is_bare_numeric(data) || is.matrix(data))
+  if (rlang::is_bare_numeric(data) || is.matrix(data) || is.data.frame(data))
     data <- purrr::array_tree(data, margin = 1)
 
   if (!is.list(data) && !inherits(data, "dist"))
@@ -97,9 +97,8 @@ anova_test <- function(data, memberships,
   if (!rlang::is_bare_integer(memberships) &&
       !rlang::is_bare_character(memberships) &&
       !is.factor(memberships))
-    abort("The {.arg memberships} argument should be a vector of integers,
-          characters or a factor specifying the class which each observation
-          belongs to.")
+    abort("The {.arg memberships} argument should be a factor specifying the class
+          which each observation belongs to.")
   original_memberships <- unclass(as.factor(memberships))
   n <- length(memberships)
 
