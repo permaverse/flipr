@@ -85,7 +85,7 @@ df_mean <- tibble(
 ) %>%
   pivot_longer(-delta)
 
-saveRDS(df_mean, "data-raw/df_mean.rds")
+saveRDS(df_mean, "vignettes/plausibility-df-mean.rds")
 
 # Inference on the standard deviation -------------------------------------
 
@@ -151,7 +151,7 @@ df_sd <- tibble(
 ) %>%
   pivot_longer(-rho)
 
-saveRDS(df_sd, "data-raw/df_sd.rds")
+saveRDS(df_sd, "vignettes/plausibility-df-sd.rds")
 
 # Inference on both the mean and the standard deviation -------------------
 
@@ -208,7 +208,7 @@ if (requireNamespace("interp", quietly = TRUE)) {
 
 df_fisher <- pf$grid
 
-saveRDS(df_fisher, "data-raw/df_fisher.rds")
+saveRDS(df_fisher, "vignettes/plausibility-df-fisher.rds")
 
 # Tippett combining function
 pf$set_aggregator("tippett")
@@ -236,4 +236,4 @@ if (requireNamespace("interp", quietly = TRUE)) {
 
 df_tippett <- pf$grid
 
-saveRDS(df_tippett, "data-raw/df_tippett.rds")
+saveRDS(df_tippett, "vignettes/plausibility-df-tippett.rds")

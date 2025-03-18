@@ -16,8 +16,13 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# load libraries
 library(flipr)
-load("../R/sysdata.rda")
+
+# import data
+df_parallelization <- readRDS("parallelization-df.rds")
+
 time_without_parallel <- df_parallelization$time_without_parallel
 time_without_future <- df_parallelization$time_without_future
 time_with_parallel <- df_parallelization$time_with_parallel

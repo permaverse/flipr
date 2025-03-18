@@ -17,13 +17,20 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# load the necessary packages
 library(dplyr)
 library(ggplot2)
 library(purrr)
 library(tibble)
 library(tidyr)
 library(flipr)
-load("../R/sysdata.rda")
+
+# import the data
+df_mean <- readRDS("plausibility-df-mean.rds")
+df_sd <- readRDS("plausibility-df-sd.rds")
+df_fisher <- readRDS("plausibility-df-fisher.rds")
+df_tippett <- readRDS("plausibility-df-tippett.rds")
 ```
 
 ```{r setup, message=FALSE}

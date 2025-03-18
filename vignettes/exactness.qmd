@@ -17,13 +17,17 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# load packages
 library(dplyr)
 library(ggplot2)
 library(purrr)
 library(tidyr)
 library(flipr)
 library(furrr)
-load("../R/sysdata.rda")
+
+# import data
+alpha_estimates <- readRDS("exactness-alpha.rds")
 ```
 
 In this article, we discuss the exactness property of permutation tests,

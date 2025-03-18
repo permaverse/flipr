@@ -16,12 +16,18 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# load libraries
 library(dplyr)
 library(ggplot2)
 library(purrr)
 library(tidyr)
 library(flipr)
-load("../R/sysdata.rda")
+
+# import data
+pfa <- readRDS("flipr-pfa.rds")
+pfb <- readRDS("flipr-pfb.rds")
+pfc <- readRDS("flipr-pfc.rds")
 ```
 
 The permutation framework is perfectly suited for making inference as it allows

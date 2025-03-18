@@ -99,5 +99,4 @@ df_parallelization <- list(
   time_with_future = time_with_future
 )
 
-saveRDS(df_parallelization, "data-raw/df_parallelization.rds")
-
+saveRDS(df_parallelization, "vignettes/parallelization-df.rds")
