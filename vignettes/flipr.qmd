@@ -126,6 +126,7 @@ We can define a proper function to do this, termed the *null specification* func
 - `parameters` which is a numeric vector of values for the parameters under investigation (here only $\delta$ and thus `parameters` is of length $1$ with `parameters[1] = delta`).
 
 In our simple example, it boils down to:
+
 ```{r}
 null_spec <- function(y, parameters) {
   purrr::map(y, ~ .x - parameters[1])
@@ -142,6 +143,7 @@ This statistic can be easily computed using `stats::t.test(x, y, var.equal = TRU
 - `indices1` which is an integer vector of size $n_x$ storing the indices of the data points belonging to the first sample in the current permuted version of the data.
 
 A [**flipr**](https://permaverse.github.io/flipr/)-compatible version of the t-statistic is already implemented in [**flipr**](https://permaverse.github.io/flipr/) and ready to use as `stat_student` or its alias `stat_t`. Here, we are only going to use the $t$-statistic for this example, but we might be willing to use more than one statistic for a parameter or we might have several parameters under investigation, each one of them requiring a different test statistic. We therefore group all the test statistics that we need into a single list:
+
 ```{r}
 stat_functions <- list(stat_t)
 ```
@@ -149,6 +151,7 @@ stat_functions <- list(stat_t)
 ### Statistic assignments
 
 Finally we need to define a named list that tells [**flipr**](https://permaverse.github.io/flipr/) which test statistics among the ones declared in the `stat_functions` list should be used for each parameter under investigation. This is used to determine bounds on each parameter for the plausibility function. This list, often termed `stat_assignments`, should therefore have as many elements as there are parameters under investigation. Each element should be named after a parameter under investigation and should list the indices corresponding to the test statistics that should be used for that parameter in `stat_functions`. In our example, it boils down to:
+
 ```{r}
 stat_assignments <- list(delta = 1)
 ```
@@ -156,6 +159,7 @@ stat_assignments <- list(delta = 1)
 ### Instantiation of the plausibility function
 
 In [**flipr**](https://permaverse.github.io/flipr/), the plausibility function is implemented as an [R6Class](https://r6.r-lib.org/reference/R6Class.html) object. Assume we observed two samples stored in lists `x` and `y`, we therefore instantiate a plausibility function for this data as follows:
+
 ```{r, eval=FALSE}
 pf <- PlausibilityFunction$new(
   null_spec = null_spec,
@@ -170,6 +174,7 @@ Now, assume we want to test the following hypotheses:
 $$ H_0: \delta = 0 \quad \mbox{v.s.} \quad H_1: \delta \ne 0. $$
 
 We use the `$get_value()` method for this purpose, which essentially evaluates the permutation $p$-value of a two-sided test by default:
+
 ```{r, eval=FALSE}
 pf$get_value(0)
 ```
@@ -183,6 +188,7 @@ By default, the number of sampled permutations is `1000L`. It is accessible thro
 ### Scenario A
 
 Let us instantiate the plausibility for the data simulated under scenario A:
+
 ```{r, eval=FALSE}
 pfa <- PlausibilityFunction$new(
   null_spec = null_spec,
@@ -194,15 +200,19 @@ pfa$set_nperms(B)
 ```
 
 We can compute a point estimate of the mean difference and store it inside the plausibility function class via the `$set_point_estimate()` method:
+
 ```{r, eval=FALSE}
 pfa$set_point_estimate(mean(a2) - mean(a1))
 ```
 
 The computed value can then be accessed via the `$point_estimate` field:
+
 ```{r}
 pfa$point_estimate
 ```
+
 or by displaying the list of parameters under investigation which is stored in the `$parameters` field.
+
 ```{r, eval=FALSE}
 pfa$parameters
 ```
@@ -215,6 +225,7 @@ p
 ```
 
 In this list, one can see that parameters come with an unknown range by default. We can however compute their bounds by defining a maximum confidence level through the `$set_max_conf_level()` method of the `PlausibilityFunction` class. When a plausibility function is instantiated, the default value for the `$max_conf_level` field is $0.99$. To set parameter bounds automatically, use the `$set_parameter_bounds()` method:
+
 ```{r, eval=FALSE}
 pfa$set_parameter_bounds(
   point_estimate = pfa$point_estimate, 
@@ -223,11 +234,13 @@ pfa$set_parameter_bounds(
 ```
 
 We can now inspect again the list of parameters under investigation to see the updated bounds:
+
 ```{r}
 pfa$parameters
 ```
 
 Once bounds are known for each parameter, it becomes possible to generate a grid for later evaluating the plausibility function. This is done through the `$set_grid()` method as follows:
+
 ```{r, eval=FALSE}
 pfa$set_grid(
   parameters = pfa$parameters, 
@@ -236,6 +249,7 @@ pfa$set_grid(
 ```
 
 We can then take a look at the newly created grid:
+
 ```{r, eval=FALSE}
 pfa$grid
 ```
@@ -245,16 +259,19 @@ select(pfa$grid, -pvalue)
 ```
 
 We can go a step further and evaluate the plausibility function on that grid using the `$evaluate_grid()` method as follows:
+
 ```{r, eval=FALSE}
 pfa$evaluate_grid(grid = pfa$grid)
 ```
 
 Again, we can then take a look at the updated grid:
+
 ```{r}
 pfa$grid
 ```
 
 We can add to this grid the p-value computed from the t-test assuming normality of the data:
+
 ```{r}
 dfa <- pfa$grid %>%
   mutate(
@@ -471,11 +488,13 @@ by-product as we will show in the next sections.
 One can obtain a point estimate of the parameter under investigation by
 searching which value of the parameter reaches the maximum of the
 $p$-value function (which is $1$). One can use the `$set_point_estimate()` method to do that:
+
 ```{r, eval=FALSE}
 pfa$set_point_estimate(overwrite = TRUE)
 ```
 
 The computed point estimate is then stored in the `$point_estimate` field and can be retrieved as:
+
 ```{r}
 pfa$point_estimate
 ```
@@ -486,6 +505,7 @@ One can obtain a confidence interval for the parameter under
 investigation by searching for which values of the parameter the
 $p$-value function remains above a pre-specified significance level
 $\alpha$. This is achieved via the `$set_parameter_bounds()` method:
+
 ```{r, eval=FALSE}
 pfa$set_parameter_bounds(
   point_estimate = pfa$point_estimate, 
@@ -504,6 +524,7 @@ hypothesis is $H_0: \delta = \delta_0$ is immediate from the $p$-value
 function as it boils down to evaluating the $p$-value function in
 $\delta_0$. Hence we can for instance test $H_0: \delta = 3$ against the
 alternative $H_1: \delta \ne 3$ using the following piece of code:
+
 ```{r}
 pfa$set_nperms(1000)
 pfa$get_value(3)
