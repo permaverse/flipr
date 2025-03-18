@@ -26,10 +26,18 @@ library(tidyr)
 library(flipr)
 
 # import the data
-df_mean <- readRDS("plausibility-df-mean.rds")
-df_sd <- readRDS("plausibility-df-sd.rds")
-df_fisher <- readRDS("plausibility-df-fisher.rds")
-df_tippett <- readRDS("plausibility-df-tippett.rds")
+df_mean <- readRDS(
+  system.file("vignette-data/plausibility-df-mean.rds", package = "flipr")
+)
+df_sd <- readRDS(
+  system.file("vignette-data/plausibility-df-sd.rds", package = "flipr")
+)
+df_fisher <- readRDS(
+  system.file("vignette-data/plausibility-df-fisher.rds", package = "flipr")
+)
+df_tippett <- readRDS(
+  system.file("vignette-data/plausibility-df-tippett.rds", package = "flipr")
+)
 ```
 
 ```{r setup, message=FALSE}

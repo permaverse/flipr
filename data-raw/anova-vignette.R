@@ -58,7 +58,7 @@ out <- list(
   grid = pf$grid
 )
 
-saveRDS(out, "vignettes/anova-df1.rds")
+saveRDS(out, "inst/vignette-data/anova-df1.rds")
 
 # M-ANOVA -------------------------------------------------------------------
 
@@ -122,6 +122,6 @@ out <- list(
   grid = pf$grid
 )
 
-saveRDS(out, "vignettes/anova-df2.rds")
+saveRDS(out, "inst/vignette-data/anova-df2.rds")
 
 stopCluster(cl)

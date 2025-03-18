@@ -27,7 +27,9 @@ library(flipr)
 library(furrr)
 
 # import data
-alpha_estimates <- readRDS("exactness-alpha.rds")
+alpha_estimates <- readRDS(
+  system.file("vignette-data/exactness-alpha.rds", package = "flipr")
+)
 ```
 
 In this article, we discuss the exactness property of permutation tests,

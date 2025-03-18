@@ -48,7 +48,7 @@ pfa$set_grid(
 pfa$set_nperms(nperms)
 pfa$evaluate_grid(grid = pfa$grid)
 
-saveRDS(pfa, "vignettes/flipr-pfa.rds")
+saveRDS(pfa, "inst/vignette-data/flipr-pfa.rds")
 
 # Scenario B --------------------------------------------------------------
 
@@ -79,7 +79,7 @@ pfb$set_grid(
 pfb$set_nperms(nperms)
 pfb$evaluate_grid(grid = pfb$grid)
 
-saveRDS(pfb, "vignettes/flipr-pfb.rds")
+saveRDS(pfb, "inst/vignette-data/flipr-pfb.rds")
 
 # Scenario C --------------------------------------------------------------
 
@@ -110,4 +110,4 @@ pfc$set_grid(
 pfc$set_nperms(nperms)
 pfc$evaluate_grid(grid = pfb$grid)
 
-saveRDS(pfc, "vignettes/flipr-pfc.rds")
+saveRDS(pfc, "inst/vignette-data/flipr-pfc.rds")

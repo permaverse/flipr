@@ -20,7 +20,9 @@ knitr::opts_chunk$set(
 library(flipr)
 
 # import data
-df_parallelization <- readRDS("parallelization-df.rds")
+df_parallelization <- readRDS(
+  system.file("vignette-data/parallelization-df.rds", package = "flipr")
+)
 
 time_without_parallel <- df_parallelization$time_without_parallel
 time_without_future <- df_parallelization$time_without_future

@@ -25,9 +25,15 @@ library(tidyr)
 library(flipr)
 
 # import data
-pfa <- readRDS("flipr-pfa.rds")
-pfb <- readRDS("flipr-pfb.rds")
-pfc <- readRDS("flipr-pfc.rds")
+pfa <- readRDS(
+  system.file("vignette-data/flipr-pfa.rds", package = "flipr")
+)
+pfb <- readRDS(
+  system.file("vignette-data/flipr-pfb.rds", package = "flipr")
+)
+pfc <- readRDS(
+  system.file("vignette-data/flipr-pfc.rds", package = "flipr")
+)
 ```
 
 The permutation framework is perfectly suited for making inference as it allows
