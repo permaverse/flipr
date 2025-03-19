@@ -15,9 +15,18 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# load libraries
 library(flipr)
 library(ggplot2)
-load("../R/sysdata.rda")
+
+# import data
+df_1anova <- readRDS(
+  system.file("vignette-data/anova-df1.rds", package = "flipr")
+)
+df_2anova <- readRDS(
+  system.file("vignette-data/anova-df2.rds", package = "flipr")
+)
 
 pvalue1 <- df_1anova$pvalue
 pvalue1_est <- df_1anova$pvalue_est

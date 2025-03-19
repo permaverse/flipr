@@ -11,19 +11,33 @@ vignette: >
 bibliography: references.bib
 ---
 
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# load the necessary packages
 library(dplyr)
 library(ggplot2)
 library(purrr)
 library(tibble)
 library(tidyr)
 library(flipr)
-load("../R/sysdata.rda")
+
+# import the data
+df_mean <- readRDS(
+  system.file("vignette-data/plausibility-df-mean.rds", package = "flipr")
+)
+df_sd <- readRDS(
+  system.file("vignette-data/plausibility-df-sd.rds", package = "flipr")
+)
+df_fisher <- readRDS(
+  system.file("vignette-data/plausibility-df-fisher.rds", package = "flipr")
+)
+df_tippett <- readRDS(
+  system.file("vignette-data/plausibility-df-tippett.rds", package = "flipr")
+)
 ```
 
 ```{r setup, message=FALSE}

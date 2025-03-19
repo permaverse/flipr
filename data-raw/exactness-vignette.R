@@ -67,4 +67,4 @@ progressr::with_progress({
 
 alpha_estimates
 
-saveRDS(alpha_estimates, "data-raw/alpha.rds")
+saveRDS(alpha_estimates, "inst/vignette-data/exactness-alpha.rds")
