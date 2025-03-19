@@ -6,11 +6,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>The alternative hypothesis in permutation testing • flipr</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="The alternative hypothesis in permutation testing">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="alternative_files/libs/quarto-html/popper.min.js"></script><script src="alternative_files/libs/quarto-html/tippy.umd.min.js"></script><link href="alternative_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="alternative_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="The alternative hypothesis in permutation testing">
+<meta property="og:image" content="https://permaverse.github.io/flipr/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -35,6 +44,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/alternative.html">The alternative hypothesis in permutation testing</a></li>
+    <li><a class="dropdown-item" href="../articles/anova.html">Performing ANOVA</a></li>
     <li><a class="dropdown-item" href="../articles/exactness.html">On the exactness of permutation tests</a></li>
     <li><a class="dropdown-item" href="../articles/parallelization.html">Parallel processing</a></li>
     <li><a class="dropdown-item" href="../articles/plausibility.html">Computing plausibility functions</a></li>
@@ -52,155 +62,158 @@
 
 
   </div>
-</nav><div class="container template-article">
-
-
-
-
+</nav><div class="container template-quarto">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>The alternative hypothesis in permutation testing</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/permaverse/flipr/blob/master/vignettes/alternative.Rmd" class="external-link"><code>vignettes/alternative.Rmd</code></a></small>
-      <div class="d-none name"><code>alternative.Rmd</code></div>
+
+
+
+
+      <small class="dont-index">Source: <a href="https://github.com/permaverse/flipr/blob/master/vignettes/alternative.qmd" class="external-link"><code>vignettes/alternative.qmd</code></a></small>
+      <div class="d-none name"><code></code></div>
     </div>
 
-    
-    
-<p>In this article, we discuss a key difference between the traditional
-framework for null hypothesis significance testing (NHST) and the
-permutation framework for NHST. This critical difference lies at the
-root of the framework in the specification of the null and alternative
-hypothesis. First, we review the traditional approach to NHST. Second we
-explain how the use of the permutation framework requires particular
-care when formulating the null and alternative hypotheses. Finally, we
-will discuss an approach proposed by <span class="citation">Pesarin and
-Salmaso (2010)</span>, coined <strong>Non-Parametric
-Combination</strong> (NPC), which allows one to combine several test
-statistics into a single test.</p>
-<div class="section level2">
-<h2 id="traditional-nhst">Traditional NHST<a class="anchor" aria-label="anchor" href="#traditional-nhst"></a>
+
+
+
+
+
+    <p>In this article, we discuss a key difference between the traditional framework for null hypothesis significance testing (NHST) and the permutation framework for NHST. This critical difference lies at the root of the framework in the specification of the null and alternative hypothesis. First, we review the traditional approach to NHST. Second we explain how the use of the permutation framework requires particular care when formulating the null and alternative hypotheses. Finally, we will discuss an approach proposed by <span class="citation" data-cites="pesarin2010">(<a href="#ref-pesarin2010" role="doc-biblioref">Pesarin and Salmaso 2010</a>)</span>, coined <strong>Non-Parametric Combination</strong> (NPC), which allows one to combine several test statistics into a single test.</p>
+<section class="level2"><h2 id="traditional-nhst">Traditional NHST<a class="anchor" aria-label="anchor" href="#traditional-nhst"></a>
 </h2>
-<p>The traditional approach to NHST pertains to specifying a null
-distribution
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>
-that we would like to reject in favor of an alternative hypothesis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>a</mi></msub><annotation encoding="application/x-tex">H_a</annotation></semantics></math>
-given statistical evidence in the form of data samples. For example, if
-we study the effect of some drug on the amount of sugar in the blood in
-patients diagnosed with diabetes, we might take two samples out of two
-distinct populations, one to which we gave a placebo and one to which we
-gave the treatment. At this point, the goal is to show that the average
-amount of sugar in the treatment group is lower than the one in the
-placebo group. Hence, a suitable test for answering this question is
-given by the following hypotheses:</p>
+<p>The traditional approach to NHST pertains to specifying a null distribution <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math> that we would like to reject in favor of an alternative hypothesis <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>a</mi></msub><annotation encoding="application/x-tex">H_a</annotation></semantics></math> given statistical evidence in the form of data samples. For example, if we study the effect of some drug on the amount of sugar in the blood in patients diagnosed with diabetes, we might take two samples out of two distinct populations, one to which we gave a placebo and one to which we gave the treatment. At this point, the goal is to show that the average amount of sugar in the treatment group is lower than the one in the placebo group. Hence, a suitable test for answering this question is given by the following hypotheses:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msub><mi>μ</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>≥</mo><msub><mi>μ</mi><mrow><mi mathvariant="normal">p</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">b</mi><mi mathvariant="normal">o</mi></mrow></msub><mspace width="1.0em"></mspace><mtext mathvariant="normal">against</mtext><mspace width="1.0em"></mspace><msub><mi>H</mi><mi>a</mi></msub><mo>:</mo><msub><mi>μ</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>&lt;</mo><msub><mi>μ</mi><mrow><mi mathvariant="normal">p</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">b</mi><mi mathvariant="normal">o</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
 H_0: \mu_\mathrm{treatment} \ge \mu_\mathrm{placebo} \quad \mbox{against} \quad H_a: \mu_\mathrm{treatment} &lt; \mu_\mathrm{placebo}
 </annotation></semantics></math></p>
-<p>As suggested by intuition, the alternative hypothesis is first
-determined on the basis of what we aim at proving and the null
-hypothesis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>
-is then deduced as the complementary event to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>a</mi></msub><annotation encoding="application/x-tex">H_a</annotation></semantics></math>.</p>
-</div>
-<div class="section level2">
-<h2 id="permutation-nhst">Permutation NHST<a class="anchor" aria-label="anchor" href="#permutation-nhst"></a>
+<p>As suggested by intuition, the alternative hypothesis is first determined on the basis of what we aim at proving and the null hypothesis <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math> is then deduced as the complementary event to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>a</mi></msub><annotation encoding="application/x-tex">H_a</annotation></semantics></math>.</p>
+</section><section class="level2"><h2 id="permutation-nhst">Permutation NHST<a class="anchor" aria-label="anchor" href="#permutation-nhst"></a>
 </h2>
-<p>The permutation framework completely redefines the null and
-alternative hypotheses with respect to the traditional approach:</p>
+<p>The permutation framework completely redefines the null and alternative hypotheses with respect to the traditional approach:</p>
 <ul>
-<li>The null hypothesis is <strong>always the same</strong> for all
-tests performed in the permutation framework. This is by design. In
-effect, the idea of using the permutations to approach the null
-distribution relies on the assumption of data exchangeability under
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>.
-This means that the null hypothesis always needs to be that the two
-samples are drawn from the same underlying distribution. Hence, if we
-have two independent samples
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>X</mi><msub><mi>n</mi><mi>x</mi></msub></msub><mover><mo>∼</mo><mrow><mi>i</mi><mi>.</mi><mi>i</mi><mi>.</mi><mi>d</mi><mi>.</mi></mrow></mover><msub><mi>F</mi><mi>X</mi></msub></mrow><annotation encoding="application/x-tex">X_1, \dots, X_{n_x} \stackrel{i.i.d.}{\sim} F_X</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>Y</mi><msub><mi>n</mi><mi>y</mi></msub></msub><mover><mo>∼</mo><mrow><mi>i</mi><mi>.</mi><mi>i</mi><mi>.</mi><mi>d</mi><mi>.</mi></mrow></mover><msub><mi>F</mi><mi>Y</mi></msub></mrow><annotation encoding="application/x-tex">Y_1, \dots, Y_{n_y} \stackrel{i.i.d.}{\sim} F_Y</annotation></semantics></math>,
-the null hypothesis for the two-sample problem is necessarily:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msub><mi>F</mi><mi>X</mi></msub><mo>=</mo><msub><mi>F</mi><mi>Y</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex"> H_0: F_X = F_Y. </annotation></semantics></math>
+<li>The null hypothesis is <strong>always the same</strong> for all tests performed in the permutation framework. This is by design. In effect, the idea of using the permutations to approach the null distribution relies on the assumption of data exchangeability under <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>. This means that the null hypothesis always needs to be that the two samples are drawn from the same underlying distribution. Hence, if we have two independent samples <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>X</mi><msub><mi>n</mi><mi>x</mi></msub></msub><mover><mo>∼</mo><mrow><mi>i</mi><mi>.</mi><mi>i</mi><mi>.</mi><mi>d</mi><mi>.</mi></mrow></mover><msub><mi>F</mi><mi>X</mi></msub></mrow><annotation encoding="application/x-tex">X_1, \dots, X_{n_x} \stackrel{i.i.d.}{\sim} F_X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>Y</mi><msub><mi>n</mi><mi>y</mi></msub></msub><mover><mo>∼</mo><mrow><mi>i</mi><mi>.</mi><mi>i</mi><mi>.</mi><mi>d</mi><mi>.</mi></mrow></mover><msub><mi>F</mi><mi>Y</mi></msub></mrow><annotation encoding="application/x-tex">Y_1, \dots, Y_{n_y} \stackrel{i.i.d.}{\sim} F_Y</annotation></semantics></math>, the null hypothesis for the two-sample problem is necessarily: <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msub><mi>F</mi><mi>X</mi></msub><mo>=</mo><msub><mi>F</mi><mi>Y</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex"> H_0: F_X = F_Y. </annotation></semantics></math>
 </li>
-<li>The alternative hypothesis <strong>is not</strong> the complementary
-event to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>.
-In effect, that would be
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>X</mi></msub><mo>≠</mo><msub><mi>F</mi><mi>Y</mi></msub></mrow><annotation encoding="application/x-tex">F_X \neq F_Y</annotation></semantics></math>.
-However, there could be millions of reasons for that to be true. In
-practice, the use of a specific test statistic targets some aspect(s) of
-the distributions. For instance, if one uses Hotelling’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>T</mi><mn>2</mn></msup><annotation encoding="application/x-tex">T^2</annotation></semantics></math>
-statistic, focus is put on finding differences in the first-order moment
-of the two distributions
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi>X</mi></msub><annotation encoding="application/x-tex">F_X</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi>Y</mi></msub><annotation encoding="application/x-tex">F_Y</annotation></semantics></math>.</li>
-<li>These two differences generate a huge change of paradigm for
-interpreting the results. In effect, suppose that the permutation test
-using Hotelling’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>T</mi><mn>2</mn></msup><annotation encoding="application/x-tex">T^2</annotation></semantics></math>
-statistic reveals that there is not enough evidence to reject the null
-hypothesis. This does not imply, by no means, that we can assume that
-the two samples come from the same distribution, because, for all we
-know, our data could contain enough evidence to identify differences in
-variance or higher moments.</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="non-parametric-combination">Non-Parametric Combination<a class="anchor" aria-label="anchor" href="#non-parametric-combination"></a>
+<li>The alternative hypothesis <strong>is not</strong> the complementary event to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>. In effect, that would be <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>X</mi></msub><mo>≠</mo><msub><mi>F</mi><mi>Y</mi></msub></mrow><annotation encoding="application/x-tex">F_X \neq F_Y</annotation></semantics></math>. However, there could be millions of reasons for that to be true. In practice, the use of a specific test statistic targets some aspect(s) of the distributions. For instance, if one uses Hotelling’s <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>T</mi><mn>2</mn></msup><annotation encoding="application/x-tex">T^2</annotation></semantics></math> statistic, focus is put on finding differences in the first-order moment of the two distributions <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi>X</mi></msub><annotation encoding="application/x-tex">F_X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi>Y</mi></msub><annotation encoding="application/x-tex">F_Y</annotation></semantics></math>.</li>
+<li>These two differences generate a huge change of paradigm for interpreting the results. In effect, suppose that the permutation test using Hotelling’s <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>T</mi><mn>2</mn></msup><annotation encoding="application/x-tex">T^2</annotation></semantics></math> statistic reveals that there is not enough evidence to reject the null hypothesis. This does not imply, by no means, that we can assume that the two samples come from the same distribution, because, for all we know, our data could contain enough evidence to identify differences in variance or higher moments.</li>
+</ul></section><section class="level2"><h2 id="non-parametric-combination">Non-Parametric Combination<a class="anchor" aria-label="anchor" href="#non-parametric-combination"></a>
 </h2>
-<p>Once you have your sample of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
-permutations out the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>t</mi></msub><annotation encoding="application/x-tex">m_t</annotation></semantics></math>
-possible ones, you can in fact compute the values of as many test
-statistics
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>,</mo><mi>…</mi><mo>,</mo><msup><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>L</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">T^{(1)}, \dots, T^{(L)}</annotation></semantics></math>
-as you want. At this point, you might want to use the unbiased estimator
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><msub><mi>p</mi><mi>∞</mi></msub><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>=</mo><mfrac><msup><mi>B</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msup><mi>m</mi></mfrac></mrow><annotation encoding="application/x-tex">\widehat{p_\infty}^{(\ell)} = \frac{B^{(\ell)}}{m}</annotation></semantics></math>
-of the p-value
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>∞</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>=</mo><mi>ℙ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>≥</mo><msubsup><mi>t</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">b</mi><mi mathvariant="normal">s</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_\infty^{(\ell)} = \mathbb{P} \left( T^{(\ell)} \ge t_\mathrm{obs}^{(\ell)} \right)</annotation></semantics></math>
-for each test statistic to produce
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
-p-value estimates, each one targeting a different aspect of the
-distributions under investigation. Since this evidence has been
-summarized by p-values, they are all on the same scale even though they
-might look at very different features of the distributions. They can
-therefore be combined in various ways to provide a single test statistic
-value to be used in the testing procedure. There are several possible
-<strong>combining functions</strong> to do this fusion of p-values. The
-package <strong>flipr</strong> currently implements:</p>
+<p>Once you have your sample of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math> permutations out the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>t</mi></msub><annotation encoding="application/x-tex">m_t</annotation></semantics></math> possible ones, you can in fact compute the values of as many test statistics <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>,</mo><mi>…</mi><mo>,</mo><msup><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>L</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">T^{(1)}, \dots, T^{(L)}</annotation></semantics></math> as you want. At this point, you might want to use the unbiased estimator <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><msub><mi>p</mi><mi>∞</mi></msub><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>=</mo><mfrac><msup><mi>B</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msup><mi>m</mi></mfrac></mrow><annotation encoding="application/x-tex">\widehat{p_\infty}^{(\ell)} = \frac{B^{(\ell)}}{m}</annotation></semantics></math> of the p-value <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>∞</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>=</mo><mi>ℙ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>T</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>≥</mo><msubsup><mi>t</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">b</mi><mi mathvariant="normal">s</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mo>ℓ</mo><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_\infty^{(\ell)} = \mathbb{P} \left( T^{(\ell)} \ge t_\mathrm{obs}^{(\ell)} \right)</annotation></semantics></math> for each test statistic to produce <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math> p-value estimates, each one targeting a different aspect of the distributions under investigation. Since this evidence has been summarized by p-values, they are all on the same scale even though they might look at very different features of the distributions. They can therefore be combined in various ways to provide a single test statistic value to be used in the testing procedure. There are several possible <strong>combining functions</strong> to do this fusion of p-values. The package <strong>flipr</strong> currently implements:</p>
 <ul>
-<li>Tippett’s combining function:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">t</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>p</mi><mi>L</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><msub><mo>min</mo><mrow><mo>ℓ</mo><mo>∈</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>L</mi></mrow></msub><msub><mi>p</mi><mo>ℓ</mo></msub></mrow><annotation encoding="application/x-tex">\mathrm{Tippett}(p_1, …, p_L) = 1 - \min_{\ell \in 1, \dots, L} p_\ell</annotation></semantics></math>;
-and,</li>
-<li>Fisher’s combining function:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">F</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>p</mi><mi>L</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>−</mo><mn>2</mn><msubsup><mo>∑</mo><mrow><mo>ℓ</mo><mo>=</mo><mn>1</mn></mrow><mi>L</mi></msubsup><mo>log</mo><msub><mi>p</mi><mo>ℓ</mo></msub></mrow><annotation encoding="application/x-tex">\mathrm{Fisher}(p_1, …, p_L) = -2 \sum_{\ell=1}^L \log p_\ell</annotation></semantics></math>.</li>
+<li>Tippett’s combining function: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">t</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>p</mi><mi>L</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><msub><mo>min</mo><mrow><mo>ℓ</mo><mo>∈</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>L</mi></mrow></msub><msub><mi>p</mi><mo>ℓ</mo></msub></mrow><annotation encoding="application/x-tex">\mathrm{Tippett}(p_1, …, p_L) = 1 - \min_{\ell \in 1, \dots, L} p_\ell</annotation></semantics></math>; and,</li>
+<li>Fisher’s combining function: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">F</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>p</mi><mi>L</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>−</mi><mn>2</mn><msubsup><mo>∑</mo><mrow><mo>ℓ</mo><mo>=</mo><mn>1</mn></mrow><mi>L</mi></msubsup><mo>log</mo><msub><mi>p</mi><mo>ℓ</mo></msub></mrow><annotation encoding="application/x-tex">\mathrm{Fisher}(p_1, …, p_L) = -2 \sum_{\ell=1}^L \log p_\ell</annotation></semantics></math>.</li>
 </ul>
-<p>The choice of the combining function is made through the optional
-argument <code>combining_function</code> which takes a string as value.
-At the moment, it accepts either <code>"tippett"</code> or
-<code>"fisher"</code> for picking one of the two above-mentioned
-combining functions.</p>
-</div>
-<div class="section level2 unnumbered">
-<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<p>The choice of the combining function is made through the optional argument <code>combining_function</code> which takes a string as value. At the moment, it accepts either <code>"tippett"</code> or <code>"fisher"</code> for picking one of the two above-mentioned combining functions.</p>
+</section><section class="level2 unnumbered"><h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-pesarin2010" class="csl-entry">
-Pesarin, Fortunato, and Luigi Salmaso. 2010. <span>“Permutation Tests
-for Complex Data,”</span> March. <a href="https://doi.org/10.1002/9780470689516" class="external-link">https://doi.org/10.1002/9780470689516</a>.
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-pesarin2010" class="csl-entry" role="listitem">
+Pesarin, Fortunato, and Luigi Salmaso. 2010. <span>“Permutation Tests for Complex Data,”</span> March. <a href="https://doi.org/10.1002/9780470689516" class="external-link">https://doi.org/10.1002/9780470689516</a>.
 </div>
 </div>
-</div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+</section><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config);
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
-
 
 
     <footer><div class="pkgdown-footer-left">

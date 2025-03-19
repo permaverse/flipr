@@ -6,11 +6,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Parallel processing • flipr</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Parallel processing">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="parallelization_files/libs/quarto-html/popper.min.js"></script><script src="parallelization_files/libs/quarto-html/tippy.umd.min.js"></script><link href="parallelization_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="parallelization_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Parallel processing">
+<meta property="og:image" content="https://permaverse.github.io/flipr/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -35,6 +44,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/alternative.html">The alternative hypothesis in permutation testing</a></li>
+    <li><a class="dropdown-item" href="../articles/anova.html">Performing ANOVA</a></li>
     <li><a class="dropdown-item" href="../articles/exactness.html">On the exactness of permutation tests</a></li>
     <li><a class="dropdown-item" href="../articles/parallelization.html">Parallel processing</a></li>
     <li><a class="dropdown-item" href="../articles/plausibility.html">Computing plausibility functions</a></li>
@@ -52,44 +62,30 @@
 
 
   </div>
-</nav><div class="container template-article">
-
-
-
-
+</nav><div class="container template-quarto">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Parallel processing</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/permaverse/flipr/blob/master/vignettes/parallelization.Rmd" class="external-link"><code>vignettes/parallelization.Rmd</code></a></small>
-      <div class="d-none name"><code>parallelization.Rmd</code></div>
+
+
+
+
+      <small class="dont-index">Source: <a href="https://github.com/permaverse/flipr/blob/master/vignettes/parallelization.qmd" class="external-link"><code>vignettes/parallelization.qmd</code></a></small>
+      <div class="d-none name"><code></code></div>
     </div>
 
-    
-    
-<p>The <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
-package uses functions contained in the <a href="https://future.futureverse.org/index.html" class="external-link"><strong>furrr</strong></a>
-package for parallel processing. The setting of parallelization has to
-be done on the user side. We illustrate here how to achieve asynchronous
-evaluation. We use the <a href="https://future.futureverse.org/index.html" class="external-link"><strong>future</strong></a>
-package to set the plan, the <strong>parallel</strong> package to define
-a default cluster, and the <a href="https://progressr.futureverse.org/index.html" class="external-link"><strong>progressr</strong></a>
-package to report progress updates.</p>
-<p>By setting the desired number of cores, we define the number of
-background R sessions that will be used to evaluate expressions in
-parallel. This number is used to set the multisession plan with the
-function <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">future::plan()</a></code> and to define a default cluster
-with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>. Then, to enable the
-visualization of evaluation progress, we can put the code in the
-<code><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a></code> function, or more simply set it
-for all the following code with the <code><a href="https://progressr.futureverse.org/reference/handlers.html" class="external-link">progressr::handlers()</a></code>
-function. After these settings, <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
-functions can be used, as shown in this example.</p>
-<p>To show the benefit of parallel processing, we compare here the
-processing times necessary to evaluate a grid with a plausibility
-function. First, here is the computation without parallelization.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+
+
+
+
+
+    <p>The <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a> package uses functions contained in the <a href="https://future.futureverse.org/index.html" class="external-link"><strong>furrr</strong></a> package for parallel processing. The setting of parallelization has to be done on the user side. We illustrate here how to achieve asynchronous evaluation. We use the <a href="https://future.futureverse.org/index.html" class="external-link"><strong>future</strong></a> package to set the plan, the <strong>parallel</strong> package to define a default cluster, and the <a href="https://progressr.futureverse.org/index.html" class="external-link"><strong>progressr</strong></a> package to report progress updates.</p>
+<p>More precisely, setting a default cluster with <strong>parallel</strong> is useful to allow parallel computation of the point estimate if an estimation is needed. On the other side, setting the plan with <a href="https://future.futureverse.org/index.html" class="external-link"><strong>future</strong></a> allows parallel computation when evaluating the plausibility function. A comparison of computation time with sequential and parallel computation for those two cases is done in the following.</p>
+<section class="level2"><h2 id="computation-without-parallel-processing">Computation without parallel processing<a class="anchor" aria-label="anchor" href="#computation-without-parallel-processing"></a>
+</h2>
+<p>To show the benefit of parallel processing, we compare here the processing times necessary to compute a point estimation and to evaluate the grid for a plausibility function. First, here is the computation without parallelization.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span></span>
@@ -106,39 +102,44 @@ function. First, here is the computation without parallelization.</p>
 <span>  stat_assignments <span class="op">=</span> <span class="va">stat_assignments</span>,</span>
 <span>  <span class="va">x</span>, <span class="va">y</span></span>
 <span><span class="op">)</span></span>
+<span><span class="va">pf</span><span class="op">$</span><span class="fu">set_nperms</span><span class="op">(</span><span class="fl">2000</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pf</span><span class="op">$</span><span class="fu">set_point_estimate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">pf</span><span class="op">$</span><span class="fu">set_parameter_bounds</span><span class="op">(</span></span>
+<span><span class="fu">tic</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">pf</span><span class="op">$</span><span class="fu">set_point_estimate</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">time_without_parallel</span> <span class="op">&lt;-</span> <span class="fu">toc</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">callback_msg</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">time_without_parallel</span></span>
+<span><span class="co">#&gt; [1] "135.323 sec elapsed"</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pf</span><span class="op">$</span><span class="fu">set_parameter_bounds</span><span class="op">(</span></span>
 <span>  point_estimate <span class="op">=</span> <span class="va">pf</span><span class="op">$</span><span class="va">point_estimate</span>, </span>
 <span>  conf_level <span class="op">=</span> <span class="va">pf</span><span class="op">$</span><span class="va">max_conf_level</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">pf</span><span class="op">$</span><span class="fu">set_grid</span><span class="op">(</span></span>
 <span>  parameters <span class="op">=</span> <span class="va">pf</span><span class="op">$</span><span class="va">parameters</span>, </span>
-<span>  npoints <span class="op">=</span> <span class="fl">50L</span></span>
+<span>  npoints <span class="op">=</span> <span class="fl">100L</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu">tic</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">pf</span><span class="op">$</span><span class="fu">evaluate_grid</span><span class="op">(</span>grid <span class="op">=</span> <span class="va">pf</span><span class="op">$</span><span class="va">grid</span><span class="op">)</span></span>
-<span><span class="va">time_without_parallelization</span> <span class="op">&lt;-</span> <span class="fu">tictoc</span><span class="fu">::</span><span class="fu">toc</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">time_without_parallelization</span> </span>
-<span><span class="co">#&gt; [1] "48.827 sec elapsed"</span></span></code></pre></div>
-<div class="section level2">
-<h2 id="computation-with-parallel-processing">Computation with parallel processing<a class="anchor" aria-label="anchor" href="#computation-with-parallel-processing"></a>
+<span><span class="va">time_without_future</span> <span class="op">&lt;-</span> <span class="fu">tictoc</span><span class="fu">::</span><span class="fu">toc</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">callback_msg</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">time_without_future</span></span>
+<span><span class="co">#&gt; [1] "42.511 sec elapsed"</span></span></code></pre></div>
+</div>
+</section><section class="level2"><h2 id="computation-with-parallel-processing">Computation with parallel processing<a class="anchor" aria-label="anchor" href="#computation-with-parallel-processing"></a>
 </h2>
-<p>By setting the desired number of cores, we define the number of
-background R sessions that will be used to evaluate expressions in
-parallel. This number is used to set the multisession plan with the
-function <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">future::plan()</a></code> and to define a default cluster
-with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>. Then, to enable the
-visualization of evaluation progress, we can put the code in the
-<code><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a></code> function, or more simply set it
-for all the following code with the <code><a href="https://progressr.futureverse.org/reference/handlers.html" class="external-link">progressr::handlers()</a></code>
-function. After these settings, <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
-functions can be used, as shown in this example.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ncores</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
-<span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="va">ncores</span><span class="op">)</span></span>
+<p>By setting the desired number of cores, we define the number of background R sessions that will be used to evaluate expressions in parallel. This number is used to set the multisession plan with the function <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">future::plan()</a></code> and to define a default cluster with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>. Then, to enable the visualization of evaluation progress, we can put the code in the <code><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a></code> function, or more simply set it for all the following code with the <code><a href="https://progressr.futureverse.org/reference/handlers.html" class="external-link">progressr::handlers()</a></code> function. After these settings, <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a> functions can be used, as shown in this example.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ncores</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
+<span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/multisession.html" class="external-link">multisession</a></span>, workers <span class="op">=</span> <span class="va">ncores</span><span class="op">)</span></span>
 <span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="va">ncores</span><span class="op">)</span></span>
 <span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">setDefaultCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
 <span><span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://progressr.futureverse.org/reference/handlers.html" class="external-link">handlers</a></span><span class="op">(</span>global <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -159,41 +160,152 @@ functions can be used, as shown in this example.</p>
 <span>  stat_assignments <span class="op">=</span> <span class="va">stat_assignments</span>,</span>
 <span>  <span class="va">x</span>, <span class="va">y</span></span>
 <span><span class="op">)</span></span>
+<span><span class="va">pf</span><span class="op">$</span><span class="fu">set_nperms</span><span class="op">(</span><span class="fl">2000</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pf</span><span class="op">$</span><span class="fu">set_point_estimate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">pf</span><span class="op">$</span><span class="fu">set_parameter_bounds</span><span class="op">(</span></span>
+<span><span class="fu">tic</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">pf</span><span class="op">$</span><span class="fu">set_point_estimate</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">time_with_parallel</span> <span class="op">&lt;-</span> <span class="fu">toc</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">callback_msg</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">time_with_parallel</span></span>
+<span><span class="co">#&gt; [1] "47.882 sec elapsed"</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pf</span><span class="op">$</span><span class="fu">set_parameter_bounds</span><span class="op">(</span></span>
 <span>  point_estimate <span class="op">=</span> <span class="va">pf</span><span class="op">$</span><span class="va">point_estimate</span>, </span>
 <span>  conf_level <span class="op">=</span> <span class="va">pf</span><span class="op">$</span><span class="va">max_conf_level</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">pf</span><span class="op">$</span><span class="fu">set_grid</span><span class="op">(</span></span>
 <span>  parameters <span class="op">=</span> <span class="va">pf</span><span class="op">$</span><span class="va">parameters</span>, </span>
-<span>  npoints <span class="op">=</span> <span class="fl">50L</span></span>
+<span>  npoints <span class="op">=</span> <span class="fl">100L</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu">tic</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">pf</span><span class="op">$</span><span class="fu">evaluate_grid</span><span class="op">(</span>grid <span class="op">=</span> <span class="va">pf</span><span class="op">$</span><span class="va">grid</span><span class="op">)</span></span>
-<span><span class="va">time_with_parallelization</span> <span class="op">&lt;-</span> <span class="fu">tictoc</span><span class="fu">::</span><span class="fu">toc</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">time_with_future</span> <span class="op">&lt;-</span> <span class="fu">tictoc</span><span class="fu">::</span><span class="fu">toc</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">callback_msg</span></span>
 <span></span>
 <span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div>
-<p>It is good practice to shut down the workers with the
-<code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::stopCluster()</a></code> function at the end of the
-code.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">time_with_parallelization</span></span>
-<span><span class="co">#&gt; [1] "15.525 sec elapsed"</span></span></code></pre></div>
-<p>This experiment proves that we can save a lot of computation time
-when using parallel processing, as we gained approximately 33 seconds in
-this example to evaluate the plausibility function.</p>
-<p>Finally, to return to a sequential plan with no progress updates, the
-following code can be used.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></span>
+</div>
+<p>It is good practice to shut down the workers with the <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::stopCluster()</a></code> function at the end of the code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">time_with_future</span></span>
+<span><span class="co">#&gt; [1] "14.463 sec elapsed"</span></span></code></pre></div>
+</div>
+<p>This experiment proves that we can save a lot of computation time when using parallel processing. Indeed, by setting 3 cores for each of the parallel processing tools, we reduced approximately by 3 times the computation time for both computing a point estimation and evaluating the plausibility function.</p>
+<p>Finally, to return to a sequential plan with no progress updates, the following code can be used. It also allows to shut down the workers used in <a href="https://future.futureverse.org/index.html" class="external-link"><strong>future</strong></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/sequential.html" class="external-link">sequential</a></span><span class="op">)</span></span>
 <span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">setDefaultCluster</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://progressr.futureverse.org/reference/handlers.html" class="external-link">handlers</a></span><span class="op">(</span>global <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
-  </main>
+</section><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config);
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
-
 
 
     <footer><div class="pkgdown-footer-left">

@@ -6,11 +6,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Computing plausibility functions • flipr</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Computing plausibility functions">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="plausibility_files/libs/quarto-html/popper.min.js"></script><script src="plausibility_files/libs/quarto-html/tippy.umd.min.js"></script><link href="plausibility_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="plausibility_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Computing plausibility functions">
+<meta property="og:image" content="https://permaverse.github.io/flipr/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -35,6 +44,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/alternative.html">The alternative hypothesis in permutation testing</a></li>
+    <li><a class="dropdown-item" href="../articles/anova.html">Performing ANOVA</a></li>
     <li><a class="dropdown-item" href="../articles/exactness.html">On the exactness of permutation tests</a></li>
     <li><a class="dropdown-item" href="../articles/parallelization.html">Parallel processing</a></li>
     <li><a class="dropdown-item" href="../articles/plausibility.html">Computing plausibility functions</a></li>
@@ -52,23 +62,25 @@
 
 
   </div>
-</nav><div class="container template-article">
-
-
-
-
+</nav><div class="container template-quarto">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Computing plausibility functions</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/permaverse/flipr/blob/master/vignettes/plausibility.Rmd" class="external-link"><code>vignettes/plausibility.Rmd</code></a></small>
-      <div class="d-none name"><code>plausibility.Rmd</code></div>
+
+
+
+
+      <small class="dont-index">Source: <a href="https://github.com/permaverse/flipr/blob/master/vignettes/plausibility.qmd" class="external-link"><code>vignettes/plausibility.qmd</code></a></small>
+      <div class="d-none name"><code></code></div>
     </div>
 
-    
-    
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+
+
+
+
+
+    <div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ngrid_in</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">ngrid_out</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
 <span><span class="va">nperms</span> <span class="op">&lt;-</span> <span class="fl">100000</span></span>
@@ -81,23 +93,12 @@
 <span><span class="va">y2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n2</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">z1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n1</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">z2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n2</span>, mean <span class="op">=</span> <span class="fl">3</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p>The concept of plausibility functions pertains to assessing the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-of a set of null hypotheses and to plot this
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-surface on the domain defined by the set of null hypotheses. The idea
-behind is that, if such a plausibility function is available, you can
-deduce from it point estimates or confidence interval estimates for
-parameters used to define the nulls or extract a single
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-for a specific null of interest <span class="citation">(Martin 2017;
-Fraser 2019; Infanger and Schmidt-Trucksäss 2019)</span>. In particular,
-there is another <strong>R</strong> package dedicated to plausibility
-functions called <a href="https://CRAN.R-project.org/package=pvaluefunctions" class="external-link"><strong>pvaluefunctions</strong></a>.</p>
-<div class="section level2">
-<h2 id="plausibility-function-for-the-mean">Plausibility function for the mean<a class="anchor" aria-label="anchor" href="#plausibility-function-for-the-mean"></a>
+</div>
+<p>The concept of plausibility functions pertains to assessing the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value of a set of null hypotheses and to plot this <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value surface on the domain defined by the set of null hypotheses. The idea behind is that, if such a plausibility function is available, you can deduce from it point estimates or confidence interval estimates for parameters used to define the nulls or extract a single <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value for a specific null of interest <span class="citation" data-cites="martin2017 fraser2019 infanger2019">(<a href="#ref-martin2017" role="doc-biblioref">Martin 2017</a>; <a href="#ref-fraser2019" role="doc-biblioref">Fraser 2019</a>; <a href="#ref-infanger2019" role="doc-biblioref">Infanger and Schmidt-Trucksäss 2019</a>)</span>. In particular, there is another <strong>R</strong> package dedicated to plausibility functions called <a href="https://CRAN.R-project.org/package=pvaluefunctions" class="external-link"><strong>pvaluefunctions</strong></a>.</p>
+<section class="level2"><h2 id="plausibility-function-for-the-mean">Plausibility function for the mean<a class="anchor" aria-label="anchor" href="#plausibility-function-for-the-mean"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_spec</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">parameters</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">map</span><span class="op">(</span><span class="va">y</span>, <span class="op">~</span> <span class="va">.x</span> <span class="op">-</span> <span class="va">parameters</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -154,7 +155,9 @@ functions called <a href="https://CRAN.R-project.org/package=pvaluefunctions" cl
 <span>  right_tail <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/approxfun.html" class="external-link">approx</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">delta</span>, <span class="va">df</span><span class="op">$</span><span class="va">right_tail</span>, <span class="va">delta</span><span class="op">)</span><span class="op">$</span><span class="va">y</span>, </span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">delta</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_mean</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">delta</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -180,12 +183,17 @@ functions called <a href="https://CRAN.R-project.org/package=pvaluefunctions" cl
 <span>    linetype <span class="op">=</span> <span class="st">"dashed"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plausibility_files/figure-html/unnamed-chunk-3-1.png" width="97%"></p>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="plausibility_files/figure-html/unnamed-chunk-3-1.png" style="width:97.0%"></p>
+</figure>
 </div>
-<div class="section level2">
-<h2 id="plausibility-function-for-the-variance">Plausibility function for the variance<a class="anchor" aria-label="anchor" href="#plausibility-function-for-the-variance"></a>
+</div>
+</div>
+</section><section class="level2"><h2 id="plausibility-function-for-the-variance">Plausibility function for the variance<a class="anchor" aria-label="anchor" href="#plausibility-function-for-the-variance"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_spec</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">parameters</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">map</span><span class="op">(</span><span class="va">y</span>, <span class="op">~</span> <span class="va">.x</span> <span class="op">/</span> <span class="va">parameters</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -242,7 +250,9 @@ functions called <a href="https://CRAN.R-project.org/package=pvaluefunctions" cl
 <span>  right_tail <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/approxfun.html" class="external-link">approx</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">rho</span>, <span class="va">df</span><span class="op">$</span><span class="va">right_tail</span>, <span class="va">rho</span><span class="op">)</span><span class="op">$</span><span class="va">y</span>, </span>
 <span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">rho</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_sd</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">rho</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -268,28 +278,16 @@ functions called <a href="https://CRAN.R-project.org/package=pvaluefunctions" cl
 <span>    linetype <span class="op">=</span> <span class="st">"dashed"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plausibility_files/figure-html/unnamed-chunk-5-1.png" width="97%"></p>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="plausibility_files/figure-html/unnamed-chunk-5-1.png" style="width:97.0%"></p>
+</figure>
 </div>
-<div class="section level2">
-<h2 id="plausibility-function-for-both-mean-and-variance">Plausibility function for both mean and variance<a class="anchor" aria-label="anchor" href="#plausibility-function-for-both-mean-and-variance"></a>
+</div>
+</div>
+</section><section class="level2"><h2 id="plausibility-function-for-both-mean-and-variance">Plausibility function for both mean and variance<a class="anchor" aria-label="anchor" href="#plausibility-function-for-both-mean-and-variance"></a>
 </h2>
-<p>Assume that we have two r.v.
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
-that differ in distribution only in their first two moments. Let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>μ</mi><mi>X</mi></msub><annotation encoding="application/x-tex">\mu_X</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>μ</mi><mi>Y</mi></msub><annotation encoding="application/x-tex">\mu_Y</annotation></semantics></math>
-be the means of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
-respectively and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>X</mi></msub><annotation encoding="application/x-tex">\sigma_X</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>Y</mi></msub><annotation encoding="application/x-tex">\sigma_Y</annotation></semantics></math>
-be the standard deviations. We can therefore write</p>
+<p>Assume that we have two r.v. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> that differ in distribution only in their first two moments. Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>μ</mi><mi>X</mi></msub><annotation encoding="application/x-tex">\mu_X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>μ</mi><mi>Y</mi></msub><annotation encoding="application/x-tex">\mu_Y</annotation></semantics></math> be the means of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> respectively and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>X</mi></msub><annotation encoding="application/x-tex">\sigma_X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>Y</mi></msub><annotation encoding="application/x-tex">\sigma_Y</annotation></semantics></math> be the standard deviations. We can therefore write</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mi>δ</mi><mo>+</mo><mi>ρ</mi><mi>X</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
 Y = \delta + \rho X.
 </annotation></semantics></math></p>
@@ -305,11 +303,9 @@ Y = \delta + \rho X.
 \rho = \frac{\sigma_Y}{\sigma_X}
 \end{cases}
 </annotation></semantics></math></p>
-<p>In the following example, we have
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\delta = 3</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\rho = 2</annotation></semantics></math>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>In the following example, we have <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\delta = 3</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\rho = 2</annotation></semantics></math>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_spec</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">parameters</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">map</span><span class="op">(</span><span class="va">y</span>, <span class="op">~</span> <span class="op">(</span><span class="va">.x</span> <span class="op">-</span> <span class="va">parameters</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="va">parameters</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -384,7 +380,9 @@ and
 <span>  <span class="va">pf</span><span class="op">$</span><span class="va">grid</span><span class="op">$</span><span class="va">pvalue</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">pf</span><span class="op">$</span><span class="va">grid</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df_tippett</span> <span class="op">&lt;-</span> <span class="va">pf</span><span class="op">$</span><span class="va">grid</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_fisher</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">delta</span>, <span class="va">log_rho</span>, z <span class="op">=</span> <span class="va">pvalue</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_contour_filled</span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -396,8 +394,15 @@ and
 <span>    fill <span class="op">=</span> <span class="st">"p-value"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plausibility_files/figure-html/unnamed-chunk-7-1.png" width="97%"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="cell-output-display">
+<div>
+<figure><p><img src="plausibility_files/figure-html/unnamed-chunk-7-1.png" style="width:97.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_tippett</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">delta</span>, <span class="va">log_rho</span>, z <span class="op">=</span> <span class="va">pvalue</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">geom_contour_filled</span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -409,33 +414,130 @@ and
 <span>    fill <span class="op">=</span> <span class="st">"p-value"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plausibility_files/figure-html/unnamed-chunk-8-1.png" width="97%"></p>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="plausibility_files/figure-html/unnamed-chunk-8-1.png" style="width:97.0%"></p>
+</figure>
 </div>
-<div class="section level2 unnumbered">
-<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</div>
+</div>
+</section><section class="level2 unnumbered"><h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-fraser2019" class="csl-entry">
-Fraser, D. A. S. 2019. <span>“The p-Value Function and Statistical
-Inference.”</span> <em>The American Statistician</em> 73 (sup1): 135–47.
-<a href="https://doi.org/10.1080/00031305.2018.1556735" class="external-link">https://doi.org/10.1080/00031305.2018.1556735</a>.
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-fraser2019" class="csl-entry" role="listitem">
+Fraser, D. A. S. 2019. <span>“The p-Value Function and Statistical Inference.”</span> <em>The American Statistician</em> 73 (sup1): 135–47. <a href="https://doi.org/10.1080/00031305.2018.1556735" class="external-link">https://doi.org/10.1080/00031305.2018.1556735</a>.
 </div>
-<div id="ref-infanger2019" class="csl-entry">
-Infanger, Denis, and Arno Schmidt-Trucksäss. 2019. <span>“P Value
-Functions: An Underused Method to Present Research Results and to
-Promote Quantitative Reasoning.”</span> <em>Statistics in Medicine</em>
-38 (21): 4189–97. <a href="https://doi.org/10.1002/sim.8293" class="external-link">https://doi.org/10.1002/sim.8293</a>.
+<div id="ref-infanger2019" class="csl-entry" role="listitem">
+Infanger, Denis, and Arno Schmidt-Trucksäss. 2019. <span>“P Value Functions: An Underused Method to Present Research Results and to Promote Quantitative Reasoning.”</span> <em>Statistics in Medicine</em> 38 (21): 4189–97. <a href="https://doi.org/10.1002/sim.8293" class="external-link">https://doi.org/10.1002/sim.8293</a>.
 </div>
-<div id="ref-martin2017" class="csl-entry">
-Martin, Ryan. 2017. <span>“A Statistical Inference Course Based on
-p-Values.”</span> <em>The American Statistician</em> 71 (2): 128–36. <a href="https://doi.org/10.1080/00031305.2016.1208629" class="external-link">https://doi.org/10.1080/00031305.2016.1208629</a>.
+<div id="ref-martin2017" class="csl-entry" role="listitem">
+Martin, Ryan. 2017. <span>“A Statistical Inference Course Based on p-Values.”</span> <em>The American Statistician</em> 71 (2): 128–36. <a href="https://doi.org/10.1080/00031305.2016.1208629" class="external-link">https://doi.org/10.1080/00031305.2016.1208629</a>.
 </div>
 </div>
-</div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+</section><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config);
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
-
 
 
     <footer><div class="pkgdown-footer-left">

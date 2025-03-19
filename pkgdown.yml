@@ -3,11 +3,12 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   alternative: alternative.html
+  anova: anova.html
   exactness: exactness.html
   flipr: flipr.html
   parallelization: parallelization.html
   plausibility: plausibility.html
-last_built: 2025-01-06T23:09Z
+last_built: 2025-03-19T14:13Z
 urls:
   reference: https://permaverse.github.io/flipr/reference
   article: https://permaverse.github.io/flipr/articles

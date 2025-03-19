@@ -6,11 +6,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>A tour of permutation inference • flipr</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A tour of permutation inference">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="flipr_files/libs/quarto-html/popper.min.js"></script><script src="flipr_files/libs/quarto-html/tippy.umd.min.js"></script><link href="flipr_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="flipr_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A tour of permutation inference">
+<meta property="og:image" content="https://permaverse.github.io/flipr/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -35,6 +44,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/alternative.html">The alternative hypothesis in permutation testing</a></li>
+    <li><a class="dropdown-item" href="../articles/anova.html">Performing ANOVA</a></li>
     <li><a class="dropdown-item" href="../articles/exactness.html">On the exactness of permutation tests</a></li>
     <li><a class="dropdown-item" href="../articles/parallelization.html">Parallel processing</a></li>
     <li><a class="dropdown-item" href="../articles/plausibility.html">Computing plausibility functions</a></li>
@@ -52,55 +62,33 @@
 
 
   </div>
-</nav><div class="container template-article">
-
-
-
-
+</nav><div class="container template-quarto">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>A tour of permutation inference</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/permaverse/flipr/blob/master/vignettes/flipr.Rmd" class="external-link"><code>vignettes/flipr.Rmd</code></a></small>
-      <div class="d-none name"><code>flipr.Rmd</code></div>
+
+
+
+
+      <small class="dont-index">Source: <a href="https://github.com/permaverse/flipr/blob/master/vignettes/flipr.qmd" class="external-link"><code>vignettes/flipr.qmd</code></a></small>
+      <div class="d-none name"><code></code></div>
     </div>
 
-    
-    
-<p>The permutation framework is perfectly suited for making inference as
-it allows one to perform point estimation, confidence regions and
-hypothesis tests under mild assumptions about the collected data and no
-distributional assumption. In this article, we briefly illustrate how
-each of these aspects can be treated from a permutation point of view
-using the <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
-package. This package has been written and is intended as a low-level
-implementation of the permutation framework in the context of
-statistical inference. The mathematical object behind the scene is the
-so-called plausibility function, sometimes called p-value function. This
-article explains what the plausibility function is and shows how it can
-be easily computed using the permutation framework with <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>.
-We illustrate the shape of the plausibility function using both Gaussian
-and Gamma distributions.</p>
-<div class="section level2">
-<h2 id="generation-of-the-toy-example">Generation of the toy example<a class="anchor" aria-label="anchor" href="#generation-of-the-toy-example"></a>
+
+
+
+
+
+    <p>The permutation framework is perfectly suited for making inference as it allows one to perform point estimation, confidence regions and hypothesis tests under mild assumptions about the collected data and no distributional assumption. In this article, we briefly illustrate how each of these aspects can be treated from a permutation point of view using the <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a> package. This package has been written and is intended as a low-level implementation of the permutation framework in the context of statistical inference. The mathematical object behind the scene is the so-called plausibility function, sometimes called p-value function. This article explains what the plausibility function is and shows how it can be easily computed using the permutation framework with <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>. We illustrate the shape of the plausibility function using both Gaussian and Gamma distributions.</p>
+<section class="level2"><h2 id="generation-of-the-toy-example">Generation of the toy example<a class="anchor" aria-label="anchor" href="#generation-of-the-toy-example"></a>
 </h2>
-<p>Let us work on a very classic toy example. Suppose that we are
-interested in studying the difference in means of two populations. We
-will generate:</p>
+<p>Let us work on a very classic toy example. Suppose that we are interested in studying the difference in means of two populations. We will generate:</p>
 <ul>
-<li>A first sample of size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>1</mn></msub><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">n_1 = 10</annotation></semantics></math>
-observations from a distribution with mean
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
-and unit variance;</li>
-<li>A second sample of size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">n_2 = 10</annotation></semantics></math>
-observations from a distribution with mean
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math>
-and unit variance.</li>
+<li>A first sample of size <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>1</mn></msub><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">n_1 = 10</annotation></semantics></math> observations from a distribution with mean <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math> and unit variance;</li>
+<li>A second sample of size <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">n_2 = 10</annotation></semantics></math> observations from a distribution with mean <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>4</mn><annotation encoding="application/x-tex">4</annotation></semantics></math> and unit variance.</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">mu1</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -108,6 +96,7 @@ and unit variance.</li>
 <span><span class="va">sd1</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">sd2</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">100000</span></span></code></pre></div>
+</div>
 <p>We will consider three different scenari:</p>
 <dl>
 <dt>Scenario A</dt>
@@ -115,199 +104,113 @@ and unit variance.</li>
 <p>Both populations follow Gaussian distributions.</p>
 </dd>
 </dl>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="va">a1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n1</span>, mean <span class="op">=</span> <span class="va">mu1</span>, sd <span class="op">=</span> <span class="va">sd1</span><span class="op">)</span></span>
 <span><span class="va">a2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n2</span>, mean <span class="op">=</span> <span class="va">mu2</span>, sd <span class="op">=</span> <span class="va">sd2</span><span class="op">)</span></span></code></pre></div>
+</div>
 <dl>
 <dt>Scenario B</dt>
 <dd>
 <p>Both populations follow Gamma distributions.</p>
 </dd>
 </dl>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="va">n1</span>, shape <span class="op">=</span> <span class="fl">1</span>, rate <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">b2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="va">n2</span>, shape <span class="op">=</span> <span class="fl">16</span>, rate <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+</div>
 <dl>
 <dt>Scenario C</dt>
 <dd>
-<p>The first population follows a Gaussian distribution while the second
-population follows a Gamma distribution.</p>
+<p>The first population follows a Gaussian distribution while the second population follows a Gamma distribution.</p>
 </dd>
 </dl>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n1</span>, mean <span class="op">=</span> <span class="va">mu1</span>, sd <span class="op">=</span> <span class="va">sd1</span><span class="op">)</span></span>
 <span><span class="va">c2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span><span class="op">(</span><span class="va">n2</span>, shape <span class="op">=</span> <span class="fl">16</span>, rate <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p>For each scenario, the goal is to make inference on the difference
-between the means of the two distributions. In other words, the
-parameter of interest is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><msub><mi>μ</mi><mn>2</mn></msub><mo>−</mo><msub><mi>μ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\delta = \mu_2 - \mu_1</annotation></semantics></math>.</p>
 </div>
-<div class="section level2">
-<h2 id="the-plausibility-function">The plausibility function<a class="anchor" aria-label="anchor" href="#the-plausibility-function"></a>
+<p>For each scenario, the goal is to make inference on the difference between the means of the two distributions. In other words, the parameter of interest is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><msub><mi>μ</mi><mn>2</mn></msub><mo>−</mo><msub><mi>μ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\delta = \mu_2 - \mu_1</annotation></semantics></math>.</p>
+</section><section class="level2"><h2 id="the-plausibility-function">The plausibility function<a class="anchor" aria-label="anchor" href="#the-plausibility-function"></a>
 </h2>
-<p>The plausibility function for the mean difference is a curve that
-represents the variation of the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-of a test in which the null hypothesis is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><msub><mi>δ</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\delta = \delta_0</annotation></semantics></math>
-as a function of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>δ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\delta_0</annotation></semantics></math><span class="citation">(Martin 2017; Fraser 2019; Infanger and
-Schmidt-Trucksäss 2019)</span>.</p>
-<p>With <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>,
-it is easy to trace such a plausibility function. Three ingredients are
-required alongside the data to instantiate such a function:</p>
+<p>The plausibility function for the mean difference is a curve that represents the variation of the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value of a test in which the null hypothesis is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><msub><mi>δ</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\delta = \delta_0</annotation></semantics></math> as a function of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>δ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\delta_0</annotation></semantics></math><span class="citation" data-cites="martin2017 fraser2019 infanger2019">(<a href="#ref-martin2017" role="doc-biblioref">Martin 2017</a>; <a href="#ref-fraser2019" role="doc-biblioref">Fraser 2019</a>; <a href="#ref-infanger2019" role="doc-biblioref">Infanger and Schmidt-Trucksäss 2019</a>)</span>.</p>
+<p>With <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>, it is easy to trace such a plausibility function. Three ingredients are required alongside the data to instantiate such a function:</p>
 <ul>
-<li>a null specification function that tells <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
-how the second sample should be transformed in order to make it
-exchangeable with the first sample under the null hypothesis;</li>
-<li>a list of test statistics to use for detecting differences between
-the distributions that generated the two observed samples;</li>
-<li>a list of index assignments that tells <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
-which test statistics to use for each parameter under
-investigation.</li>
+<li>a null specification function that tells <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a> how the second sample should be transformed in order to make it exchangeable with the first sample under the null hypothesis;</li>
+<li>a list of test statistics to use for detecting differences between the distributions that generated the two observed samples;</li>
+<li>a list of index assignments that tells <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a> which test statistics to use for each parameter under investigation.</li>
 </ul>
-<div class="section level3">
-<h3 id="null-specification">Null specification<a class="anchor" aria-label="anchor" href="#null-specification"></a>
+<section class="level3"><h3 id="null-specification">Null specification<a class="anchor" aria-label="anchor" href="#null-specification"></a>
 </h3>
-<p>In the context of null hypothesis testing, we consider the null
-hypothesis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msub><mi>μ</mi><mi>y</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>x</mi></msub><mo>=</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">H_0: \mu_y - \mu_x = \delta</annotation></semantics></math>.
-We can use a permutation scheme to approach the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-if the two samples are <em>exchangeable</em> under
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>.
-This means that we need to transform for example the second sample to
-<em>make</em> it exchangeable with the first sample under
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>.
-In this simple example, this can be achieved as follows. Let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>X</mi><msub><mi>n</mi><mi>x</mi></msub></msub><mo>∼</mo><mi>𝒩</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mi>x</mi></msub><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">X_1, \dots, X_{n_x} \sim \mathcal{N}(\mu_x, 1)</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>Y</mi><msub><mi>n</mi><mi>y</mi></msub></msub><mo>∼</mo><mi>𝒩</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mi>y</mi></msub><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Y_1, \dots, Y_{n_y} \sim \mathcal{N}(\mu_y, 1)</annotation></semantics></math>.
-We can then transform the second sample as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo>←</mo><msub><mi>Y</mi><mi>i</mi></msub><mo>−</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">Y_i \longleftarrow Y_i - \delta</annotation></semantics></math>.</p>
-<p>We can define a proper function to do this, termed the <em>null
-specification</em> function, which takes two input arguments:</p>
+<p>In the context of null hypothesis testing, we consider the null hypothesis <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msub><mi>μ</mi><mi>y</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>x</mi></msub><mo>=</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">H_0: \mu_y - \mu_x = \delta</annotation></semantics></math>. We can use a permutation scheme to approach the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value if the two samples are <em>exchangeable</em> under <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>. This means that we need to transform for example the second sample to <em>make</em> it exchangeable with the first sample under <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>. In this simple example, this can be achieved as follows. Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>X</mi><msub><mi>n</mi><mi>x</mi></msub></msub><mo>∼</mo><mi>𝒩</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mi>x</mi></msub><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">X_1, \dots, X_{n_x} \sim \mathcal{N}(\mu_x, 1)</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>Y</mi><msub><mi>n</mi><mi>y</mi></msub></msub><mo>∼</mo><mi>𝒩</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mi>y</mi></msub><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Y_1, \dots, Y_{n_y} \sim \mathcal{N}(\mu_y, 1)</annotation></semantics></math>. We can then transform the second sample as <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo>←</mo><msub><mi>Y</mi><mi>i</mi></msub><mo>−</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">Y_i \longleftarrow Y_i - \delta</annotation></semantics></math>.</p>
+<p>We can define a proper function to do this, termed the <em>null specification</em> function, which takes two input arguments:</p>
 <ul>
 <li>
-<code>y</code> which is a list storing the data points in the second
-sample;</li>
+<code>y</code> which is a list storing the data points in the second sample;</li>
 <li>
-<code>parameters</code> which is a numeric vector of values for the
-parameters under investigation (here only
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
-and thus <code>parameters</code> is of length
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
-with <code>parameters[1] = delta</code>).</li>
+<code>parameters</code> which is a numeric vector of values for the parameters under investigation (here only <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math> and thus <code>parameters</code> is of length <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math> with <code>parameters[1] = delta</code>).</li>
 </ul>
 <p>In our simple example, it boils down to:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_spec</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span>, <span class="va">parameters</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">y</span>, <span class="op">~</span> <span class="va">.x</span> <span class="op">-</span> <span class="va">parameters</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="test-statistics">Test statistics<a class="anchor" aria-label="anchor" href="#test-statistics"></a>
+</section><section class="level3"><h3 id="test-statistics">Test statistics<a class="anchor" aria-label="anchor" href="#test-statistics"></a>
 </h3>
-<p>Next, we need to decide which test statistic(s) we are going to use
-for performing the test. Here, we are only interested in one parameter,
-namely the mean difference
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>.
-Since the two samples share the same variance, we can use for example
-the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-statistic
-with a pooled estimate of the common variance.</p>
-<p>This statistic can be easily computed using
-<code>stats::t.test(x, y, var.equal = TRUE)$statistic</code>. However,
-we want to extend its evaluation to any permuted version of the data.
-Test statistic functions compatible with <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
-should have at least two mandatory input arguments:</p>
+<p>Next, we need to decide which test statistic(s) we are going to use for performing the test. Here, we are only interested in one parameter, namely the mean difference <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>. Since the two samples share the same variance, we can use for example the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-statistic with a pooled estimate of the common variance.</p>
+<p>This statistic can be easily computed using <code>stats::t.test(x, y, var.equal = TRUE)$statistic</code>. However, we want to extend its evaluation to any permuted version of the data. Test statistic functions compatible with <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a> should have at least two mandatory input arguments:</p>
 <ul>
 <li>
-<code>data</code> which is either a concatenated list of size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>x</mi></msub><mo>+</mo><msub><mi>n</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">n_x + n_y</annotation></semantics></math>
-regrouping the data points of both samples or a distance matrix of size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>x</mi></msub><mo>+</mo><msub><mi>n</mi><mi>y</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>×</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>x</mi></msub><mo>+</mo><msub><mi>n</mi><mi>y</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">(n_x + n_y) \times (n_x + n_y)</annotation></semantics></math>
-stored as an object of class <code>dist</code>.</li>
+<code>data</code> which is either a concatenated list of size <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>x</mi></msub><mo>+</mo><msub><mi>n</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">n_x + n_y</annotation></semantics></math> regrouping the data points of both samples or a distance matrix of size <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>x</mi></msub><mo>+</mo><msub><mi>n</mi><mi>y</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>×</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>x</mi></msub><mo>+</mo><msub><mi>n</mi><mi>y</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">(n_x + n_y) \times (n_x + n_y)</annotation></semantics></math> stored as an object of class <code>dist</code>.</li>
 <li>
-<code>indices1</code> which is an integer vector of size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>x</mi></msub><annotation encoding="application/x-tex">n_x</annotation></semantics></math>
-storing the indices of the data points belonging to the first sample in
-the current permuted version of the data.</li>
+<code>indices1</code> which is an integer vector of size <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>x</mi></msub><annotation encoding="application/x-tex">n_x</annotation></semantics></math> storing the indices of the data points belonging to the first sample in the current permuted version of the data.</li>
 </ul>
-<p>A <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>-compatible
-version of the t-statistic is already implemented in <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
-and ready to use as <code>stat_student</code> or its alias
-<code>stat_t</code>. Here, we are only going to use the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-statistic
-for this example, but we might be willing to use more than one statistic
-for a parameter or we might have several parameters under investigation,
-each one of them requiring a different test statistic. We therefore
-group all the test statistics that we need into a single list:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>A <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>-compatible version of the t-statistic is already implemented in <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a> and ready to use as <code>stat_student</code> or its alias <code>stat_t</code>. Here, we are only going to use the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-statistic for this example, but we might be willing to use more than one statistic for a parameter or we might have several parameters under investigation, each one of them requiring a different test statistic. We therefore group all the test statistics that we need into a single list:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stat_functions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">stat_t</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="statistic-assignments">Statistic assignments<a class="anchor" aria-label="anchor" href="#statistic-assignments"></a>
+</section><section class="level3"><h3 id="statistic-assignments">Statistic assignments<a class="anchor" aria-label="anchor" href="#statistic-assignments"></a>
 </h3>
-<p>Finally we need to define a named list that tells <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>
-which test statistics among the ones declared in the
-<code>stat_functions</code> list should be used for each parameter under
-investigation. This is used to determine bounds on each parameter for
-the plausibility function. This list, often termed
-<code>stat_assignments</code>, should therefore have as many elements as
-there are parameters under investigation. Each element should be named
-after a parameter under investigation and should list the indices
-corresponding to the test statistics that should be used for that
-parameter in <code>stat_functions</code>. In our example, it boils down
-to:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Finally we need to define a named list that tells <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a> which test statistics among the ones declared in the <code>stat_functions</code> list should be used for each parameter under investigation. This is used to determine bounds on each parameter for the plausibility function. This list, often termed <code>stat_assignments</code>, should therefore have as many elements as there are parameters under investigation. Each element should be named after a parameter under investigation and should list the indices corresponding to the test statistics that should be used for that parameter in <code>stat_functions</code>. In our example, it boils down to:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stat_assignments</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>delta <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="instantiation-of-the-plausibility-function">Instantiation of the plausibility function<a class="anchor" aria-label="anchor" href="#instantiation-of-the-plausibility-function"></a>
+</section><section class="level3"><h3 id="instantiation-of-the-plausibility-function">Instantiation of the plausibility function<a class="anchor" aria-label="anchor" href="#instantiation-of-the-plausibility-function"></a>
 </h3>
-<p>In <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>,
-the plausibility function is implemented as an <a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a> object.
-Assume we observed two samples stored in lists <code>x</code> and
-<code>y</code>, we therefore instantiate a plausibility function for
-this data as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>In <a href="https://permaverse.github.io/flipr/"><strong>flipr</strong></a>, the plausibility function is implemented as an <a href="https://r6.r-lib.org/reference/R6Class.html" class="external-link">R6Class</a> object. Assume we observed two samples stored in lists <code>x</code> and <code>y</code>, we therefore instantiate a plausibility function for this data as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PlausibilityFunction.html">PlausibilityFunction</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  null_spec <span class="op">=</span> <span class="va">null_spec</span>,</span>
 <span>  stat_functions <span class="op">=</span> <span class="va">stat_functions</span>,</span>
 <span>  stat_assignments <span class="op">=</span> <span class="va">stat_assignments</span>,</span>
 <span>  <span class="va">x</span>, <span class="va">y</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+</div>
 <p>Now, assume we want to test the following hypotheses:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><mi>δ</mi><mo>=</mo><mn>0</mn><mspace width="1.0em"></mspace><mtext mathvariant="normal">v.s.</mtext><mspace width="1.0em"></mspace><msub><mi>H</mi><mn>1</mn></msub><mo>:</mo><mi>δ</mi><mo>≠</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex"> H_0: \delta = 0 \quad \mbox{v.s.} \quad H_1: \delta \ne 0. </annotation></semantics></math></p>
-<p>We use the <code>$get_value()</code> method for this purpose, which
-essentially evaluates the permutation
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-of a two-sided test by default:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>We use the <code>$get_value()</code> method for this purpose, which essentially evaluates the permutation <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value of a two-sided test by default:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pf</span><span class="op">$</span><span class="fu">get_value</span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
-<p>It is possible to evaluate one-sided p-values as well by changing the
-<code>$alternative</code> field through the
-<code>$set_alternative()</code> method, which accepts
-<code>two_tail</code>, <code>left_tail</code> and
-<code>right_tail</code> values.`</p>
-<p>By default, the number of sampled permutations is <code>1000L</code>.
-It is accessible through the <code>$nperms</code> field and can be
-changed via the <code>$set_nperms()</code> method.</p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="application-to-the-toy-example">Application to the toy example<a class="anchor" aria-label="anchor" href="#application-to-the-toy-example"></a>
+<p>It is possible to evaluate one-sided p-values as well by changing the <code>$alternative</code> field through the <code>$set_alternative()</code> method, which accepts <code>two_tail</code>, <code>left_tail</code> and <code>right_tail</code> values.`</p>
+<p>By default, the number of sampled permutations is <code>1000L</code>. It is accessible through the <code>$nperms</code> field and can be changed via the <code>$set_nperms()</code> method.</p>
+</section></section><section class="level2"><h2 id="application-to-the-toy-example">Application to the toy example<a class="anchor" aria-label="anchor" href="#application-to-the-toy-example"></a>
 </h2>
-<div class="section level3">
-<h3 id="scenario-a">Scenario A<a class="anchor" aria-label="anchor" href="#scenario-a"></a>
+<section class="level3"><h3 id="scenario-a">Scenario A<a class="anchor" aria-label="anchor" href="#scenario-a"></a>
 </h3>
-<p>Let us instantiate the plausibility for the data simulated under
-scenario A:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>Let us instantiate the plausibility for the data simulated under scenario A:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PlausibilityFunction.html">PlausibilityFunction</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  null_spec <span class="op">=</span> <span class="va">null_spec</span>,</span>
 <span>  stat_functions <span class="op">=</span> <span class="va">stat_functions</span>,</span>
@@ -315,96 +218,103 @@ scenario A:</p>
 <span>  <span class="va">a1</span>, <span class="va">a2</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">pfa</span><span class="op">$</span><span class="fu">set_nperms</span><span class="op">(</span><span class="va">B</span><span class="op">)</span></span></code></pre></div>
-<p>We can compute a point estimate of the mean difference and store it
-inside the plausibility function class via the
-<code>$set_point_estimate()</code> method:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+</div>
+<p>We can compute a point estimate of the mean difference and store it inside the plausibility function class via the <code>$set_point_estimate()</code> method:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="fu">set_point_estimate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">a2</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">a1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>The computed value can then be accessed via the
-<code>$point_estimate</code> field:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+</div>
+<p>The computed value can then be accessed via the <code>$point_estimate</code> field:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="va">point_estimate</span></span>
 <span><span class="co">#&gt;    delta </span></span>
 <span><span class="co">#&gt; 3.264987</span></span></code></pre></div>
-<p>or by displaying the list of parameters under investigation which is
-stored in the <code>$parameters</code> field.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+</div>
+<p>or by displaying the list of parameters under investigation which is stored in the <code>$parameters</code> field.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="va">parameters</span></span></code></pre></div>
+</div>
+<div class="cell">
 <pre><code><span><span class="co">#&gt; $delta</span></span>
 <span><span class="co">#&gt; Delta (quantitative)</span></span>
 <span><span class="co">#&gt; Range: [?, ?]</span></span>
 <span><span class="co">#&gt; Point estimate: 3.26</span></span></code></pre>
-<p>In this list, one can see that parameters come with an unknown range
-by default. We can however compute their bounds by defining a maximum
-confidence level through the <code>$set_max_conf_level()</code> method
-of the <code>PlausibilityFunction</code> class. When a plausibility
-function is instantiated, the default value for the
-<code>$max_conf_level</code> field is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.99</mn><annotation encoding="application/x-tex">0.99</annotation></semantics></math>.
-To set parameter bounds automatically, use the
-<code>$set_parameter_bounds()</code> method:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+</div>
+<p>In this list, one can see that parameters come with an unknown range by default. We can however compute their bounds by defining a maximum confidence level through the <code>$set_max_conf_level()</code> method of the <code>PlausibilityFunction</code> class. When a plausibility function is instantiated, the default value for the <code>$max_conf_level</code> field is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.99</mn><annotation encoding="application/x-tex">0.99</annotation></semantics></math>. To set parameter bounds automatically, use the <code>$set_parameter_bounds()</code> method:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="fu">set_parameter_bounds</span><span class="op">(</span></span>
 <span>  point_estimate <span class="op">=</span> <span class="va">pfa</span><span class="op">$</span><span class="va">point_estimate</span>, </span>
 <span>  conf_level <span class="op">=</span> <span class="va">pfa</span><span class="op">$</span><span class="va">max_conf_level</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>We can now inspect again the list of parameters under investigation
-to see the updated bounds:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+</div>
+<p>We can now inspect again the list of parameters under investigation to see the updated bounds:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="va">parameters</span></span>
 <span><span class="co">#&gt; $delta</span></span>
 <span><span class="co">#&gt; Delta (quantitative)</span></span>
 <span><span class="co">#&gt; Range: [2.02, 4.7]</span></span>
 <span><span class="co">#&gt; Point estimate: 3.26</span></span></code></pre></div>
-<p>Once bounds are known for each parameter, it becomes possible to
-generate a grid for later evaluating the plausibility function. This is
-done through the <code>$set_grid()</code> method as follows:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+</div>
+<p>Once bounds are known for each parameter, it becomes possible to generate a grid for later evaluating the plausibility function. This is done through the <code>$set_grid()</code> method as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="fu">set_grid</span><span class="op">(</span></span>
 <span>  parameters <span class="op">=</span> <span class="va">pfa</span><span class="op">$</span><span class="va">parameters</span>, </span>
 <span>  npoints <span class="op">=</span> <span class="fl">50L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+</div>
 <p>We can then take a look at the newly created grid:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="va">grid</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 51 × 1</span></span></span>
+</div>
+<div class="cell">
+<pre><code><span><span class="co">#&gt; # A tibble: 51 × 1</span></span>
 <span><span class="co">#&gt;    delta</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>  2.02</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>  2.07</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>  2.12</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>  2.17</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>  2.22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>  2.27</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>  2.32</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  2.37</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  2.42</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  2.47</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 41 more rows</span></span></span></code></pre>
-<p>We can go a step further and evaluate the plausibility function on
-that grid using the <code>$evaluate_grid()</code> method as follows:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  2.02</span></span>
+<span><span class="co">#&gt;  2  2.07</span></span>
+<span><span class="co">#&gt;  3  2.12</span></span>
+<span><span class="co">#&gt;  4  2.17</span></span>
+<span><span class="co">#&gt;  5  2.22</span></span>
+<span><span class="co">#&gt;  6  2.27</span></span>
+<span><span class="co">#&gt;  7  2.32</span></span>
+<span><span class="co">#&gt;  8  2.37</span></span>
+<span><span class="co">#&gt;  9  2.42</span></span>
+<span><span class="co">#&gt; 10  2.47</span></span>
+<span><span class="co">#&gt; # ℹ 41 more rows</span></span></code></pre>
+</div>
+<p>We can go a step further and evaluate the plausibility function on that grid using the <code>$evaluate_grid()</code> method as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="fu">evaluate_grid</span><span class="op">(</span>grid <span class="op">=</span> <span class="va">pfa</span><span class="op">$</span><span class="va">grid</span><span class="op">)</span></span></code></pre></div>
+</div>
 <p>Again, we can then take a look at the updated grid:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="va">grid</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 51 × 2</span></span></span>
+<span><span class="co">#&gt; # A tibble: 51 × 2</span></span>
 <span><span class="co">#&gt;    delta pvalue</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>  2.02 0.010<span style="text-decoration: underline;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>  2.07 0.013<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>  2.12 0.018<span style="text-decoration: underline;">5</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>  2.17 0.024<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>  2.22 0.031<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>  2.27 0.040<span style="text-decoration: underline;">5</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>  2.32 0.052<span style="text-decoration: underline;">0</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  2.37 0.065<span style="text-decoration: underline;">9</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  2.42 0.083<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  2.47 0.104 </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 41 more rows</span></span></span></code></pre></div>
-<p>We can add to this grid the p-value computed from the t-test assuming
-normality of the data:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt;    &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  2.02 0.0102</span></span>
+<span><span class="co">#&gt;  2  2.07 0.0137</span></span>
+<span><span class="co">#&gt;  3  2.12 0.0185</span></span>
+<span><span class="co">#&gt;  4  2.17 0.0240</span></span>
+<span><span class="co">#&gt;  5  2.22 0.0317</span></span>
+<span><span class="co">#&gt;  6  2.27 0.0405</span></span>
+<span><span class="co">#&gt;  7  2.32 0.0520</span></span>
+<span><span class="co">#&gt;  8  2.37 0.0659</span></span>
+<span><span class="co">#&gt;  9  2.42 0.0834</span></span>
+<span><span class="co">#&gt; 10  2.47 0.104 </span></span>
+<span><span class="co">#&gt; # ℹ 41 more rows</span></span></code></pre></div>
+</div>
+<p>We can add to this grid the p-value computed from the t-test assuming normality of the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dfa</span> <span class="op">&lt;-</span> <span class="va">pfa</span><span class="op">$</span><span class="va">grid</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    pvalue_alt <span class="op">=</span> <span class="va">delta</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -424,7 +334,9 @@ normality of the data:</p>
 <span>    `Permutation Approach` <span class="op">=</span> <span class="va">pvalue</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">delta</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dfa</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">value</span> <span class="op">&gt;</span> <span class="fl">1e-3</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">delta</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -444,29 +356,18 @@ normality of the data:</p>
 <span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">scale_y_log10</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flipr_files/figure-html/unnamed-chunk-23-1.png" width="97%"></p>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="flipr_files/figure-html/unnamed-chunk-23-1.png" style="width:97.0%"></p>
+</figure>
 </div>
-<div class="section level3">
-<h3 id="scenario-b">Scenario B<a class="anchor" aria-label="anchor" href="#scenario-b"></a>
+</div>
+</div>
+</section><section class="level3"><h3 id="scenario-b">Scenario B<a class="anchor" aria-label="anchor" href="#scenario-b"></a>
 </h3>
-<p>However, keep in mind that the parametric Student’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-test
-is only valid for Gaussian data or for large samples invoking the
-central limit theorem. When sample sizes are low and samples are not
-drawn from Gaussian distributions, only the permutation approach is
-valid. When both samples come from non-Gaussian data (here
-Gamma-distributed samples) and sample sizes are low (here
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>10</mn><annotation encoding="application/x-tex">10</annotation></semantics></math>
-for each sample), we get the following
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-functions (cutting below
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.001</mn><annotation encoding="application/x-tex">0.001</annotation></semantics></math>
-since the usual range of useful
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
-is from
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math>
-and above):</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<p>However, keep in mind that the parametric Student’s <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-test is only valid for Gaussian data or for large samples invoking the central limit theorem. When sample sizes are low and samples are not drawn from Gaussian distributions, only the permutation approach is valid. When both samples come from non-Gaussian data (here Gamma-distributed samples) and sample sizes are low (here <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>10</mn><annotation encoding="application/x-tex">10</annotation></semantics></math> for each sample), we get the following <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value functions (cutting below <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.001</mn><annotation encoding="application/x-tex">0.001</annotation></semantics></math> since the usual range of useful <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values is from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math> and above):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfb</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PlausibilityFunction.html">PlausibilityFunction</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  null_spec <span class="op">=</span> <span class="va">null_spec</span>,</span>
 <span>  stat_functions <span class="op">=</span> <span class="va">stat_functions</span>,</span>
@@ -484,7 +385,9 @@ and above):</p>
 <span>  npoints <span class="op">=</span> <span class="fl">50L</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">pfb</span><span class="op">$</span><span class="fu">evaluate_grid</span><span class="op">(</span>grid <span class="op">=</span> <span class="va">pfb</span><span class="op">$</span><span class="va">grid</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dfb</span> <span class="op">&lt;-</span> <span class="va">pfb</span><span class="op">$</span><span class="va">grid</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    pvalue_alt <span class="op">=</span> <span class="va">delta</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -504,7 +407,9 @@ and above):</p>
 <span>    `Permutation Approach` <span class="op">=</span> <span class="va">pvalue</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">delta</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dfb</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">value</span> <span class="op">&gt;</span> <span class="fl">1e-3</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">delta</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -524,28 +429,19 @@ and above):</p>
 <span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">scale_y_log10</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flipr_files/figure-html/unnamed-chunk-26-1.png" width="97%"></p>
-<p>The parametric
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-function is clearly shifted in the decreasing part on the right of the
-plot.</p>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="flipr_files/figure-html/unnamed-chunk-26-1.png" style="width:97.0%"></p>
+</figure>
 </div>
-<div class="section level3">
-<h3 id="scenario-c">Scenario C<a class="anchor" aria-label="anchor" href="#scenario-c"></a>
+</div>
+</div>
+<p>The parametric <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value function is clearly shifted in the decreasing part on the right of the plot.</p>
+</section><section class="level3"><h3 id="scenario-c">Scenario C<a class="anchor" aria-label="anchor" href="#scenario-c"></a>
 </h3>
-<p>When only one of the samples come from non-Gaussian data (here the
-second sample is Gamma-distributed and sample sizes are low (here
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>10</mn><annotation encoding="application/x-tex">10</annotation></semantics></math>
-for each sample), we get the following
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-functions (cutting below
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.001</mn><annotation encoding="application/x-tex">0.001</annotation></semantics></math>
-since the usual range of useful
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
-is from
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math>
-and above):</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<p>When only one of the samples come from non-Gaussian data (here the second sample is Gamma-distributed and sample sizes are low (here <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>10</mn><annotation encoding="application/x-tex">10</annotation></semantics></math> for each sample), we get the following <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value functions (cutting below <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.001</mn><annotation encoding="application/x-tex">0.001</annotation></semantics></math> since the usual range of useful <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values is from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.01</mn><annotation encoding="application/x-tex">0.01</annotation></semantics></math> and above):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfc</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PlausibilityFunction.html">PlausibilityFunction</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  null_spec <span class="op">=</span> <span class="va">null_spec</span>,</span>
 <span>  stat_functions <span class="op">=</span> <span class="va">stat_functions</span>,</span>
@@ -563,7 +459,9 @@ and above):</p>
 <span>  npoints <span class="op">=</span> <span class="fl">50L</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">pfc</span><span class="op">$</span><span class="fu">evaluate_grid</span><span class="op">(</span>grid <span class="op">=</span> <span class="va">pfc</span><span class="op">$</span><span class="va">grid</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dfc</span> <span class="op">&lt;-</span> <span class="va">pfc</span><span class="op">$</span><span class="va">grid</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    pvalue_alt <span class="op">=</span> <span class="va">delta</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -583,7 +481,9 @@ and above):</p>
 <span>    `Permutation Approach` <span class="op">=</span> <span class="va">pvalue</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">delta</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dfc</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">value</span> <span class="op">&gt;</span> <span class="fl">1e-3</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">delta</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -603,119 +503,176 @@ and above):</p>
 <span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">scale_y_log10</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flipr_files/figure-html/unnamed-chunk-29-1.png" width="97%"></p>
-<p>The situation seems less critical here when only one sample is
-non-Gaussian but this is only one simulation using a Gamma-distributed
-second sample. The bias could be more important for other
-distributions.</p>
-<p>Another issue with the parametric approach is that it is very limited
-in the type of data that one can use. The parametric
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-test
-for instance is only meant for real-valued data. It will not be
-applicable to multivariate data or functional data or topological data
-or network-valued data or any other type of data that is not
-representable as real-valued data. This further motivates inference via
-permutation.</p>
-<p>Getting access to the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-function is key to making inference as point estimation, confidence
-regions and hypothesis tests all come as a by-product as we will show in
-the next sections.</p>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="flipr_files/figure-html/unnamed-chunk-29-1.png" style="width:97.0%"></p>
+</figure>
 </div>
 </div>
-<div class="section level2">
-<h2 id="inferential-tasks-via-the-plausibility-function">Inferential tasks via the plausibility function<a class="anchor" aria-label="anchor" href="#inferential-tasks-via-the-plausibility-function"></a>
+</div>
+<p>The situation seems less critical here when only one sample is non-Gaussian but this is only one simulation using a Gamma-distributed second sample. The bias could be more important for other distributions.</p>
+<p>Another issue with the parametric approach is that it is very limited in the type of data that one can use. The parametric <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-test for instance is only meant for real-valued data. It will not be applicable to multivariate data or functional data or topological data or network-valued data or any other type of data that is not representable as real-valued data. This further motivates inference via permutation.</p>
+<p>Getting access to the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value function is key to making inference as point estimation, confidence regions and hypothesis tests all come as a by-product as we will show in the next sections.</p>
+</section></section><section class="level2"><h2 id="inferential-tasks-via-the-plausibility-function">Inferential tasks via the plausibility function<a class="anchor" aria-label="anchor" href="#inferential-tasks-via-the-plausibility-function"></a>
 </h2>
-<div class="section level3">
-<h3 id="point-estimation">Point estimation<a class="anchor" aria-label="anchor" href="#point-estimation"></a>
+<section class="level3"><h3 id="point-estimation">Point estimation<a class="anchor" aria-label="anchor" href="#point-estimation"></a>
 </h3>
-<p>One can obtain a point estimate of the parameter under investigation
-by searching which value of the parameter reaches the maximum of the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-function (which is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>).
-One can use the <code>$set_point_estimate()</code> method to do
-that:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<p>One can obtain a point estimate of the parameter under investigation by searching which value of the parameter reaches the maximum of the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value function (which is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>). One can use the <code>$set_point_estimate()</code> method to do that:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="fu">set_point_estimate</span><span class="op">(</span>overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>The computed point estimate is then stored in the
-<code>$point_estimate</code> field and can be retrieved as:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+</div>
+<p>The computed point estimate is then stored in the <code>$point_estimate</code> field and can be retrieved as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="va">point_estimate</span></span>
 <span><span class="co">#&gt;    delta </span></span>
 <span><span class="co">#&gt; 3.264987</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="confidence-intervals">Confidence intervals<a class="anchor" aria-label="anchor" href="#confidence-intervals"></a>
+</section><section class="level3"><h3 id="confidence-intervals">Confidence intervals<a class="anchor" aria-label="anchor" href="#confidence-intervals"></a>
 </h3>
-<p>One can obtain a confidence interval for the parameter under
-investigation by searching for which values of the parameter the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-function remains above a pre-specified significance level
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.
-This is achieved via the <code>$set_parameter_bounds()</code>
-method:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<p>One can obtain a confidence interval for the parameter under investigation by searching for which values of the parameter the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value function remains above a pre-specified significance level <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>. This is achieved via the <code>$set_parameter_bounds()</code> method:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="fu">set_parameter_bounds</span><span class="op">(</span></span>
 <span>  point_estimate <span class="op">=</span> <span class="va">pfa</span><span class="op">$</span><span class="va">point_estimate</span>, </span>
 <span>  conf_level <span class="op">=</span> <span class="fl">0.95</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="va">parameters</span></span>
 <span><span class="co">#&gt; $delta</span></span>
 <span><span class="co">#&gt; Delta (quantitative)</span></span>
 <span><span class="co">#&gt; Range: [2.02, 4.7]</span></span>
 <span><span class="co">#&gt; Point estimate: 3.26</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="hypothesis-tests">Hypothesis tests<a class="anchor" aria-label="anchor" href="#hypothesis-tests"></a>
+</section><section class="level3"><h3 id="hypothesis-tests">Hypothesis tests<a class="anchor" aria-label="anchor" href="#hypothesis-tests"></a>
 </h3>
-<p>Extracting the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-for a single hypothesis test in which the null hypothesis is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><mi>δ</mi><mo>=</mo><msub><mi>δ</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">H_0: \delta = \delta_0</annotation></semantics></math>
-is immediate from the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-function as it boils down to evaluating the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
-function in
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>δ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\delta_0</annotation></semantics></math>.
-Hence we can for instance test
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><mi>δ</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">H_0: \delta = 3</annotation></semantics></math>
-against the alternative
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>1</mn></msub><mo>:</mo><mi>δ</mi><mo>≠</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">H_1: \delta \ne 3</annotation></semantics></math>
-using the following piece of code:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<p>Extracting the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value for a single hypothesis test in which the null hypothesis is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><mi>δ</mi><mo>=</mo><msub><mi>δ</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">H_0: \delta = \delta_0</annotation></semantics></math> is immediate from the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value function as it boils down to evaluating the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value function in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>δ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\delta_0</annotation></semantics></math>. Hence we can for instance test <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><mi>δ</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">H_0: \delta = 3</annotation></semantics></math> against the alternative <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>1</mn></msub><mo>:</mo><mi>δ</mi><mo>≠</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">H_1: \delta \ne 3</annotation></semantics></math> using the following piece of code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pfa</span><span class="op">$</span><span class="fu">set_nperms</span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">pfa</span><span class="op">$</span><span class="fu">get_value</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.5714259</span></span></code></pre></div>
 </div>
-</div>
-<div class="section level2 unnumbered">
-<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</section></section><section class="level2 unnumbered"><h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-fraser2019" class="csl-entry">
-Fraser, D. A. S. 2019. <span>“The p-Value Function and Statistical
-Inference.”</span> <em>The American Statistician</em> 73 (sup1): 135–47.
-<a href="https://doi.org/10.1080/00031305.2018.1556735" class="external-link">https://doi.org/10.1080/00031305.2018.1556735</a>.
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-fraser2019" class="csl-entry" role="listitem">
+Fraser, D. A. S. 2019. <span>“The p-Value Function and Statistical Inference.”</span> <em>The American Statistician</em> 73 (sup1): 135–47. <a href="https://doi.org/10.1080/00031305.2018.1556735" class="external-link">https://doi.org/10.1080/00031305.2018.1556735</a>.
 </div>
-<div id="ref-infanger2019" class="csl-entry">
-Infanger, Denis, and Arno Schmidt-Trucksäss. 2019. <span>“P Value
-Functions: An Underused Method to Present Research Results and to
-Promote Quantitative Reasoning.”</span> <em>Statistics in Medicine</em>
-38 (21): 4189–97. <a href="https://doi.org/10.1002/sim.8293" class="external-link">https://doi.org/10.1002/sim.8293</a>.
+<div id="ref-infanger2019" class="csl-entry" role="listitem">
+Infanger, Denis, and Arno Schmidt-Trucksäss. 2019. <span>“P Value Functions: An Underused Method to Present Research Results and to Promote Quantitative Reasoning.”</span> <em>Statistics in Medicine</em> 38 (21): 4189–97. <a href="https://doi.org/10.1002/sim.8293" class="external-link">https://doi.org/10.1002/sim.8293</a>.
 </div>
-<div id="ref-martin2017" class="csl-entry">
-Martin, Ryan. 2017. <span>“A Statistical Inference Course Based on
-p-Values.”</span> <em>The American Statistician</em> 71 (2): 128–36. <a href="https://doi.org/10.1080/00031305.2016.1208629" class="external-link">https://doi.org/10.1080/00031305.2016.1208629</a>.
+<div id="ref-martin2017" class="csl-entry" role="listitem">
+Martin, Ryan. 2017. <span>“A Statistical Inference Course Based on p-Values.”</span> <em>The American Statistician</em> 71 (2): 128–36. <a href="https://doi.org/10.1080/00031305.2016.1208629" class="external-link">https://doi.org/10.1080/00031305.2016.1208629</a>.
 </div>
 </div>
-</div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+</section><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config);
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
-
 
 
     <footer><div class="pkgdown-footer-left">
