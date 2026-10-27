@@ -80,5 +80,7 @@ make_biregular_grid <- function(params, center, levels = 3, original = TRUE) {
         seq(center_value, max_value, len = levels / 2 + 1)[-1]
       )
     }) %>%
-    purrr::cross_df()
+    c(list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)) %>%
+    do.call(expand.grid, .) %>%
+    tibble::as_tibble()
 }

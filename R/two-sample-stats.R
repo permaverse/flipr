@@ -236,11 +236,11 @@ stat_cq_ip <- function(data, indices1, ...) {
 #' @export
 stat_mod_ip <- function(data, indices1, ...) {
   l <- two_sample_prep(data, indices1)
-  l <- purrr::cross(l)
-  dist_values <- purrr::map_dbl(l, ~ getElement(
+  l <- expand.grid(idx1 = l$idx1, idx2 = l$idx2)
+  dist_values <- purrr::map2_dbl(l$idx1, l$idx2, ~ getElement(
     distObject = data,
-    rowIndex = .x$idx1,
-    colIndex = .x$idx2
+    rowIndex = .x,
+    colIndex = .y
   ))
   mean(dist_values)
 }
